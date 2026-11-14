@@ -15,6 +15,8 @@ h2{color:#00e676;text-align:center}
 .row{display:flex;justify-content:space-between;gap:10px;margin:13px 0;align-items:center}
 .tag{padding:7px 12px;border-radius:8px;font-weight:bold}
 .wait{background:#554500;color:#ffe45c}
+.signal-ce{background:#064d2b;color:#00e676}
+.signal-pe{background:#591b26;color:#ff5252}
 .green{color:#00e676}
 .red{color:#ff5252}
 button{width:100%;padding:14px;background:#00c853;color:#001b0a;border:0;border-radius:10px;font-weight:bold;font-size:16px}
@@ -62,7 +64,7 @@ button:disabled{opacity:.5}
 <div class="row"><span>Stop Loss</span><b class="red">--</b></div>
 <div class="row"><span>Target 1</span><b class="green">--</b></div>
 <div class="row"><span>Target 2</span><b class="green">--</b></div>
-<p class="small">Option chain and trade levels are not connected yet.</p>
+<p class="small">Option chain and live premium are not connected yet.</p>
 </div>
 
 <div class="card">
@@ -73,9 +75,8 @@ button:disabled{opacity:.5}
 <p class="small" id="message">Connecting to FYERS...</p>
 <p class="note">
 Market बंद असताना शेवटचे उपलब्ध भाव दिसू शकतात.
-हा dashboard indicator माहिती दाखवतो; तो हमखास BUY किंवा SELL सल्ला नाही.
-VWAP साठी index volume उपलब्ध असणे आवश्यक आहे.
-ट्रेड करण्यापूर्वी Live Market तपासा.
+हा प्राथमिक indicator-based signal आहे; हमखास BUY किंवा SELL सल्ला नाही.
+पेपर ट्रेडिंग करून नियम तपासा.
 </p>
 </div>
 
@@ -105,54 +106,68 @@ function changeText(id,c,p){
   el.className=positive?"green":"red";
 }
 
-function showIndicators(data,prefix,emaId,trendId,signalId){
+function showIndicators(data,price,prefix,emaId,trendId,signalId){
   const ema=document.getElementById(emaId);
   const trend=document.getElementById(trendId);
   const signal=document.getElementById(signalId);
 
-  if(!data){
+  function setSignal(label,cls){
+    signal.textContent=label;
+    signal.className="tag "+cls;
+  }
+
+  if(!data || data.ema9==null || data.ema20==null ||
+     data.vwap==null || data.rsi14==null || price==null){
     ema.textContent="-- / --";
     trend.textContent="Unavailable";
-    signal.textContent="WAIT";
+    setSignal("WAIT","wait");
     return;
   }
 
-  if(data.ema9!=null && data.ema20!=null){
-    const e9=Number(data.ema9);
-    const e20=Number(data.ema20);
-    ema.textContent=fmt(e9)+" / "+fmt(e20);
+  const e9=Number(data.ema9);
+  const e20=Number(data.ema20);
+  const vwap=Number(data.vwap);
+  const rsi=Number(data.rsi14);
+  const spot=Number(price);
 
-    if(e9>e20){
-      trend.textContent="BULLISH";
-      trend.className="green";
-    }else if(e9<e20){
-      trend.textContent="BEARISH";
-      trend.className="red";
-    }else{
-      trend.textContent="NEUTRAL";
-      trend.className="";
-    }
-  }else{
-    ema.textContent="-- / --";
-    trend.textContent="Unavailable";
+  if(![e9,e20,vwap,rsi,spot].every(Number.isFinite)){
+    setSignal("WAIT","wait");
+    return;
   }
 
-  const vwap=data.vwap;
-  const rsi=data.rsi14;
-  const volume=data.volume;
+  ema.textContent=fmt(e9)+" / "+fmt(e20);
+
+  if(e9>e20){
+    trend.textContent="BULLISH";
+    trend.className="green";
+  }else if(e9<e20){
+    trend.textContent="BEARISH";
+    trend.className="red";
+  }else{
+    trend.textContent="NEUTRAL";
+    trend.className="";
+  }
 
   document.getElementById(prefix+"VWAP").textContent=fmt(vwap);
   document.getElementById(prefix+"RSI").textContent=fmt(rsi);
-  document.getElementById(prefix+"Volume").textContent=fmtVolume(volume);
+  document.getElementById(prefix+"Volume").textContent=fmtVolume(data.volume);
   document.getElementById(prefix+"Session").textContent=data.vwapSession||"--";
 
   const rsiEl=document.getElementById(prefix+"RSI");
-  if(rsi!=null){
-    rsiEl.className=Number(rsi)>=70?"red":Number(rsi)<=30?"green":"";
-  }
+  rsiEl.className=rsi>=70?"red":rsi<=30?"green":"";
 
-  // Signals remain WAIT until option-chain rules are implemented.
-  signal.textContent="WAIT";
+  // CE conditions
+  if(e9>e20 && spot>vwap && rsi>=55 && rsi<=70){
+    setSignal("CE SIGNAL","signal-ce");
+  }
+  // PE conditions
+  else if(e9<e20 && spot<vwap && rsi>=30 && rsi<=45){
+    setSignal("PE SIGNAL","signal-pe");
+  }
+  // No complete setup
+  else{
+    setSignal("WAIT","wait");
+  }
 }
 
 function handleData(data){
@@ -178,8 +193,23 @@ function handleData(data){
     changeText("bankChange",data.banknifty.change,data.banknifty.changePercent);
   }
 
-  showIndicators(data.niftyIndicators,"nifty","niftyEMA","niftyTrend","niftySignal");
-  showIndicators(data.bankniftyIndicators,"bank","bankEMA","bankTrend","bankSignal");
+  showIndicators(
+    data.niftyIndicators,
+    data.nifty ? data.nifty.price : null,
+    "nifty",
+    "niftyEMA",
+    "niftyTrend",
+    "niftySignal"
+  );
+
+  showIndicators(
+    data.bankniftyIndicators,
+    data.banknifty ? data.banknifty.price : null,
+    "bank",
+    "bankEMA",
+    "bankTrend",
+    "bankSignal"
+  );
 
   document.getElementById("updated").textContent=
     data.updated ? new Date(data.updated).toLocaleString("en-IN") : "--";
