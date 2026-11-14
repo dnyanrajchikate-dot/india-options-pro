@@ -7,24 +7,38 @@
 <title>INDIA OPTIONS PRO</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#080e18;color:white;font-family:Arial;padding:16px}
+body{margin:0;background:#080e18;color:white;font-family:Arial;padding:12px}
 h2{color:#00e676;text-align:center}
-.sub{text-align:center;color:#9aa7b8}
-.card{background:#131e2e;border:1px solid #293950;border-radius:14px;padding:16px;margin:14px 0}
-.price{font-size:28px;font-weight:bold}
-.row{display:flex;justify-content:space-between;gap:10px;margin:13px 0;align-items:center}
+h3{margin-top:0}
+.sub{text-align:center;color:#9aa7b8;font-size:13px}
+.card{background:#131e2e;border:1px solid #293950;border-radius:14px;padding:14px;margin:13px 0}
+.price{font-size:26px;font-weight:bold}
+.row{display:flex;justify-content:space-between;gap:10px;margin:12px 0;align-items:center}
 .tag{padding:7px 12px;border-radius:8px;font-weight:bold}
 .wait{background:#554500;color:#ffe45c}
 .signal-ce{background:#064d2b;color:#00e676}
 .signal-pe{background:#591b26;color:#ff5252}
 .green{color:#00e676}
 .red{color:#ff5252}
-button{width:100%;padding:14px;background:#00c853;color:#001b0a;border:0;border-radius:10px;font-weight:bold;font-size:16px}
+button,select{padding:12px;border:0;border-radius:9px;font-weight:bold}
+button{width:100%;background:#00c853;color:#001b0a;font-size:15px}
 button:disabled{opacity:.5}
+select{background:#202e42;color:white;border:1px solid #40536d}
 .small{font-size:12px;color:#9aa7b8;line-height:1.5}
 .note{font-size:12px;color:#ffd65a;line-height:1.5}
+.table-wrap{overflow-x:auto;width:100%}
+table{width:100%;border-collapse:collapse;min-width:650px;font-size:12px}
+th,td{padding:9px 6px;text-align:center;border-bottom:1px solid #293950;white-space:nowrap}
+th{background:#202e42;color:#d8e5f5}
+.atm{background:#273b30}
+.strike{font-weight:bold;color:#ffd65a}
+.ce{color:#00e676}
+.pe{color:#ff7373}
+.section-title{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.expiry{color:#ffd65a;font-size:12px}
 </style>
 </head>
+
 <body>
 
 <h2>⚡ INDIA OPTIONS PRO</h2>
@@ -56,15 +70,77 @@ button:disabled{opacity:.5}
 <div class="row"><span>Trading Signal</span><span class="tag wait" id="bankSignal">WAIT</span></div>
 </div>
 
+<!-- NIFTY OPTION CHAIN -->
+<div class="card">
+<div class="section-title">
+<h3>📈 NIFTY OPTION CHAIN</h3>
+<span class="expiry" id="niftyExpiry">Expiry: --</span>
+</div>
+<div class="row">
+<span>ATM Strike</span><b id="niftyATM">--</b>
+</div>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th colspan="4" class="ce">CALL (CE)</th>
+<th class="strike">STRIKE</th>
+<th colspan="4" class="pe">PUT (PE)</th>
+</tr>
+<tr>
+<th>LTP</th><th>OI</th><th>OI CHG</th><th>VOL</th>
+<th>PRICE</th>
+<th>LTP</th><th>OI</th><th>OI CHG</th><th>VOL</th>
+</tr>
+</thead>
+<tbody id="niftyChain">
+<tr><td colspan="9">Loading Option Chain...</td></tr>
+</tbody>
+</table>
+</div>
+<p class="small" id="niftyChainStatus">Waiting for data...</p>
+</div>
+
+<!-- BANKNIFTY OPTION CHAIN -->
+<div class="card">
+<div class="section-title">
+<h3>🏦 BANKNIFTY OPTION CHAIN</h3>
+<span class="expiry" id="bankExpiry">Expiry: --</span>
+</div>
+<div class="row">
+<span>ATM Strike</span><b id="bankATM">--</b>
+</div>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th colspan="4" class="ce">CALL (CE)</th>
+<th class="strike">STRIKE</th>
+<th colspan="4" class="pe">PUT (PE)</th>
+</tr>
+<tr>
+<th>LTP</th><th>OI</th><th>OI CHG</th><th>VOL</th>
+<th>PRICE</th>
+<th>LTP</th><th>OI</th><th>OI CHG</th><th>VOL</th>
+</tr>
+</thead>
+<tbody id="bankChain">
+<tr><td colspan="9">Loading Option Chain...</td></tr>
+</tbody>
+</table>
+</div>
+<p class="small" id="bankChainStatus">Waiting for data...</p>
+</div>
+
 <div class="card">
 <h3>🎯 OPTION TRADE</h3>
-<div class="row"><span>Option</span><b>--</b></div>
-<div class="row"><span>ATM Strike</span><b>--</b></div>
-<div class="row"><span>Entry</span><b>--</b></div>
-<div class="row"><span>Stop Loss</span><b class="red">--</b></div>
-<div class="row"><span>Target 1</span><b class="green">--</b></div>
-<div class="row"><span>Target 2</span><b class="green">--</b></div>
-<p class="small">Option chain and live premium are not connected yet.</p>
+<div class="row"><span>Option</span><b id="tradeOption">--</b></div>
+<div class="row"><span>ATM Strike</span><b id="tradeStrike">--</b></div>
+<div class="row"><span>Entry</span><b id="tradeEntry">--</b></div>
+<div class="row"><span>Stop Loss</span><b class="red" id="tradeSL">--</b></div>
+<div class="row"><span>Target 1</span><b class="green" id="tradeT1">--</b></div>
+<div class="row"><span>Target 2</span><b class="green" id="tradeT2">--</b></div>
+<p class="small">Option entry, SL and targets are not generated yet. No automatic order placement.</p>
 </div>
 
 <div class="card">
@@ -75,8 +151,8 @@ button:disabled{opacity:.5}
 <p class="small" id="message">Connecting to FYERS...</p>
 <p class="note">
 Market बंद असताना शेवटचे उपलब्ध भाव दिसू शकतात.
-हा प्राथमिक indicator-based signal आहे; हमखास BUY किंवा SELL सल्ला नाही.
-पेपर ट्रेडिंग करून नियम तपासा.
+BUY / SELL संकेत हे नियमांवर आधारित आहेत; हमखास नफा किंवा अचूकतेची हमी नाही.
+Live trade करण्यापूर्वी डेटा आणि नियम तपासा.
 </p>
 </div>
 
@@ -85,175 +161,228 @@ const API_URL =
 "https://script.google.com/macros/s/AKfycbz_e3MeV0iZrtifCJLsDWV9l7FOT3aRDxn6TwduPipWsEP7ZPtcOyup9bIZY6fDddgl/exec";
 
 function fmt(v){
-  if(v===null || v===undefined || !Number.isFinite(Number(v))) return "--";
-  return Number(v).toLocaleString("en-IN",{
-    minimumFractionDigits:2,
-    maximumFractionDigits:2
-  });
+ if(v===null || v===undefined || !Number.isFinite(Number(v))) return "--";
+ return Number(v).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2});
 }
 
 function fmtVolume(v){
-  if(v===null || v===undefined || !Number.isFinite(Number(v))) return "--";
-  return Number(v).toLocaleString("en-IN");
+ if(v===null || v===undefined || !Number.isFinite(Number(v))) return "--";
+ return Number(v).toLocaleString("en-IN");
 }
 
 function changeText(id,c,p){
-  const el=document.getElementById(id);
-  if(c===null || c===undefined){el.textContent="--";return;}
-  const positive=Number(c)>=0;
-  el.textContent=(positive?"+":"")+fmt(c)+
-    " ("+(positive?"+":"")+Number(p||0).toFixed(2)+"%)";
-  el.className=positive?"green":"red";
+ const el=document.getElementById(id);
+ if(c===null || c===undefined){el.textContent="--";return;}
+ const positive=Number(c)>=0;
+ el.textContent=(positive?"+":"")+fmt(c)+" ("+
+ (positive?"+":"")+Number(p||0).toFixed(2)+"%)";
+ el.className=positive?"green":"red";
 }
 
 function showIndicators(data,price,prefix,emaId,trendId,signalId){
-  const ema=document.getElementById(emaId);
-  const trend=document.getElementById(trendId);
-  const signal=document.getElementById(signalId);
+ const ema=document.getElementById(emaId);
+ const trend=document.getElementById(trendId);
+ const signal=document.getElementById(signalId);
 
-  function setSignal(label,cls){
-    signal.textContent=label;
-    signal.className="tag "+cls;
-  }
+ function setSignal(label,cls){
+  signal.textContent=label;
+  signal.className="tag "+cls;
+ }
 
-  if(!data || data.ema9==null || data.ema20==null ||
-     data.vwap==null || data.rsi14==null || price==null){
-    ema.textContent="-- / --";
-    trend.textContent="Unavailable";
-    setSignal("WAIT","wait");
-    return;
-  }
+ if(!data || data.ema9==null || data.ema20==null ||
+    data.vwap==null || data.rsi14==null || price==null){
+  ema.textContent="-- / --";
+  trend.textContent="Unavailable";
+  setSignal("WAIT","wait");
+  return;
+ }
 
-  const e9=Number(data.ema9);
-  const e20=Number(data.ema20);
-  const vwap=Number(data.vwap);
-  const rsi=Number(data.rsi14);
-  const spot=Number(price);
+ const e9=Number(data.ema9);
+ const e20=Number(data.ema20);
+ const vwap=Number(data.vwap);
+ const rsi=Number(data.rsi14);
+ const spot=Number(price);
 
-  if(![e9,e20,vwap,rsi,spot].every(Number.isFinite)){
-    setSignal("WAIT","wait");
-    return;
-  }
+ if(![e9,e20,vwap,rsi,spot].every(Number.isFinite)){
+  setSignal("WAIT","wait");
+  return;
+ }
 
-  ema.textContent=fmt(e9)+" / "+fmt(e20);
+ ema.textContent=fmt(e9)+" / "+fmt(e20);
 
-  if(e9>e20){
-    trend.textContent="BULLISH";
-    trend.className="green";
-  }else if(e9<e20){
-    trend.textContent="BEARISH";
-    trend.className="red";
-  }else{
-    trend.textContent="NEUTRAL";
-    trend.className="";
-  }
+ if(e9>e20){
+  trend.textContent="BULLISH";
+  trend.className="green";
+ }else if(e9<e20){
+  trend.textContent="BEARISH";
+  trend.className="red";
+ }else{
+  trend.textContent="NEUTRAL";
+  trend.className="";
+ }
 
-  document.getElementById(prefix+"VWAP").textContent=fmt(vwap);
-  document.getElementById(prefix+"RSI").textContent=fmt(rsi);
-  document.getElementById(prefix+"Volume").textContent=fmtVolume(data.volume);
-  document.getElementById(prefix+"Session").textContent=data.vwapSession||"--";
+ document.getElementById(prefix+"VWAP").textContent=fmt(vwap);
+ document.getElementById(prefix+"RSI").textContent=fmt(rsi);
+ document.getElementById(prefix+"Volume").textContent=fmtVolume(data.volume);
+ document.getElementById(prefix+"Session").textContent=data.vwapSession||"--";
 
-  const rsiEl=document.getElementById(prefix+"RSI");
-  rsiEl.className=rsi>=70?"red":rsi<=30?"green":"";
+ const rsiEl=document.getElementById(prefix+"RSI");
+ rsiEl.className=rsi>=70?"red":rsi<=30?"green":"";
 
-  // BUY conditions
-  if(e9>e20 && spot>vwap && rsi>=55 && rsi<=70){
-    setSignal("BUY","signal-ce");
-  }
+ if(e9>e20 && spot>vwap && rsi>=55 && rsi<=70){
+  setSignal("BUY","signal-ce");
+ }else if(e9<e20 && spot<vwap && rsi>=30 && rsi<=45){
+  setSignal("SELL","signal-pe");
+ }else{
+  setSignal("WAIT","wait");
+ }
+}
 
-  // SELL conditions
-  else if(e9<e20 && spot<vwap && rsi>=30 && rsi<=45){
-    setSignal("SELL","signal-pe");
-  }
+function findExpiry(chain){
+ if(!chain || !Array.isArray(chain.expiryData) || !chain.expiryData.length) return "--";
+ return chain.expiryData[0].date || "--";
+}
 
-  // No complete setup
-  else{
-    setSignal("WAIT","wait");
-  }
+function renderOptionChain(chain,spot,bodyId,atmId,expiryId,statusId,step){
+ const body=document.getElementById(bodyId);
+ const atmEl=document.getElementById(atmId);
+ const expiryEl=document.getElementById(expiryId);
+ const status=document.getElementById(statusId);
+
+ if(!chain || !Array.isArray(chain.optionsChain)){
+  body.innerHTML='<tr><td colspan="9">Option Chain unavailable</td></tr>';
+  status.textContent="Option Chain data not available.";
+  return;
+ }
+
+ const options=chain.optionsChain;
+ const indexRow=options.find(x=>x.option_type==="");
+ const underlying=Number(spot || (indexRow && indexRow.ltp));
+
+ if(!Number.isFinite(underlying)){
+  body.innerHTML='<tr><td colspan="9">Spot price unavailable</td></tr>';
+  return;
+ }
+
+ const atm=Math.round(underlying/step)*step;
+ atmEl.textContent=fmt(atm);
+ expiryEl.textContent="Expiry: "+findExpiry(chain);
+
+ const strikes=[];
+ for(let i=-2;i<=2;i++) strikes.push(atm+i*step);
+
+ function getOption(strike,type){
+  return options.find(x=>
+   Number(x.strike_price)===strike && x.option_type===type
+  );
+ }
+
+ function cell(value){
+  return value===undefined || value===null ? "--" : value;
+ }
+
+ function optionCells(option,type){
+  if(!option) return '<td>--</td><td>--</td><td>--</td><td>--</td>';
+  const change=Number(option.oich||0);
+  const cls=change>0?"green":change<0?"red":"";
+  return '<td class="'+type+'">'+fmt(option.ltp)+'</td>'+
+   '<td>'+fmtVolume(option.oi)+'</td>'+
+   '<td class="'+cls+'">'+(change>0?"+":"")+fmtVolume(change)+'</td>'+
+   '<td>'+fmtVolume(option.volume)+'</td>';
+ }
+
+ body.innerHTML=strikes.map(strike=>{
+  const ce=getOption(strike,"CE");
+  const pe=getOption(strike,"PE");
+  const isATM=strike===atm;
+  return '<tr class="'+(isATM?"atm":"")+'">'+
+   optionCells(ce,"ce")+
+   '<td class="strike">'+fmtVolume(strike)+'</td>'+
+   optionCells(pe,"pe")+
+   '</tr>';
+ }).join("");
+
+ const available=strikes.filter(s=>getOption(s,"CE") || getOption(s,"PE")).length;
+ status.textContent="Showing "+available+" of 5 nearby strikes. CE / PE data from FYERS.";
 }
 
 function handleData(data){
-  const btn=document.getElementById("refreshBtn");
-  btn.disabled=false;
+ const btn=document.getElementById("refreshBtn");
+ btn.disabled=false;
 
-  if(!data || data.status!=="CONNECTED"){
-    document.getElementById("connection").textContent="ERROR";
-    document.getElementById("message").textContent=
-      data && data.message ? data.message : "Data unavailable";
-    return;
-  }
-
-  document.getElementById("connection").textContent="CONNECTED";
-
-  if(data.nifty){
-    document.getElementById("niftyPrice").textContent=fmt(data.nifty.price);
-    changeText("niftyChange",data.nifty.change,data.nifty.changePercent);
-  }
-
-  if(data.banknifty){
-    document.getElementById("bankPrice").textContent=fmt(data.banknifty.price);
-    changeText("bankChange",data.banknifty.change,data.banknifty.changePercent);
-  }
-
-  showIndicators(
-    data.niftyIndicators,
-    data.nifty ? data.nifty.price : null,
-    "nifty",
-    "niftyEMA",
-    "niftyTrend",
-    "niftySignal"
-  );
-
-  showIndicators(
-    data.bankniftyIndicators,
-    data.banknifty ? data.banknifty.price : null,
-    "bank",
-    "bankEMA",
-    "bankTrend",
-    "bankSignal"
-  );
-
-  document.getElementById("updated").textContent=
-    data.updated ? new Date(data.updated).toLocaleString("en-IN") : "--";
-
+ if(!data || data.status!=="CONNECTED"){
+  document.getElementById("connection").textContent="ERROR";
   document.getElementById("message").textContent=
-    "FYERS data received. 5-minute candles: NIFTY "+
-    (data.niftyIndicators?.candleCount ?? "--")+
-    ", BANKNIFTY "+
-    (data.bankniftyIndicators?.candleCount ?? "--");
+   data && data.message ? data.message : "Data unavailable";
+  return;
+ }
+
+ document.getElementById("connection").textContent="CONNECTED";
+
+ if(data.nifty){
+  document.getElementById("niftyPrice").textContent=fmt(data.nifty.price);
+  changeText("niftyChange",data.nifty.change,data.nifty.changePercent);
+ }
+
+ if(data.banknifty){
+  document.getElementById("bankPrice").textContent=fmt(data.banknifty.price);
+  changeText("bankChange",data.banknifty.change,data.banknifty.changePercent);
+ }
+
+ showIndicators(data.niftyIndicators,data.nifty?data.nifty.price:null,
+  "nifty","niftyEMA","niftyTrend","niftySignal");
+
+ showIndicators(data.bankniftyIndicators,data.banknifty?data.banknifty.price:null,
+  "bank","bankEMA","bankTrend","bankSignal");
+
+ renderOptionChain(data.niftyOptionChain,
+  data.nifty?data.nifty.price:null,
+  "niftyChain","niftyATM","niftyExpiry","niftyChainStatus",50);
+
+ renderOptionChain(data.bankniftyOptionChain,
+  data.banknifty?data.banknifty.price:null,
+  "bankChain","bankATM","bankExpiry","bankChainStatus",100);
+
+ document.getElementById("updated").textContent=
+  data.updated?new Date(data.updated).toLocaleString("en-IN"):"--";
+
+ document.getElementById("message").textContent=
+  "FYERS data received. 5-minute candles: NIFTY "+
+  (data.niftyIndicators?.candleCount??"--")+
+  ", BANKNIFTY "+(data.bankniftyIndicators?.candleCount??"--");
 }
 
 function loadMarketData(){
-  const btn=document.getElementById("refreshBtn");
-  btn.disabled=true;
-  document.getElementById("connection").textContent="Connecting...";
-  document.getElementById("message").textContent="Fetching FYERS data...";
+ const btn=document.getElementById("refreshBtn");
+ btn.disabled=true;
+ document.getElementById("connection").textContent="Connecting...";
+ document.getElementById("message").textContent="Fetching FYERS data...";
 
-  const old=document.getElementById("fyersJsonp");
-  if(old) old.remove();
+ const old=document.getElementById("fyersJsonp");
+ if(old) old.remove();
 
-  const callback="fyersCallback_"+Date.now();
+ const callback="fyersCallback_"+Date.now();
 
-  window[callback]=function(data){
-    handleData(data);
-    delete window[callback];
-    const script=document.getElementById("fyersJsonp");
-    if(script) script.remove();
-  };
+ window[callback]=function(data){
+  handleData(data);
+  delete window[callback];
+  const script=document.getElementById("fyersJsonp");
+  if(script) script.remove();
+ };
 
-  const script=document.createElement("script");
-  script.id="fyersJsonp";
+ const script=document.createElement("script");
+ script.id="fyersJsonp";
 
-  script.onerror=function(){
-    btn.disabled=false;
-    document.getElementById("connection").textContent="ERROR";
-    document.getElementById("message").textContent=
-      "Connection failed. Check Apps Script deployment.";
-    delete window[callback];
-  };
+ script.onerror=function(){
+  btn.disabled=false;
+  document.getElementById("connection").textContent="ERROR";
+  document.getElementById("message").textContent=
+   "Connection failed. Check Apps Script deployment.";
+  delete window[callback];
+ };
 
-  script.src=API_URL+"?callback="+callback+"&_="+Date.now();
-  document.body.appendChild(script);
+ script.src=API_URL+"?callback="+callback+"&_="+Date.now();
+ document.body.appendChild(script);
 }
 
 loadMarketData();
