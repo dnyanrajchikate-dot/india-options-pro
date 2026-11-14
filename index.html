@@ -41,7 +41,7 @@ th{background:#202e42;color:#d8e5f5}
 @media(min-width:800px){.trade-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .backtest-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0}
 .backtest-controls label{font-size:12px;color:#9aa7b8;display:block}
-.backtest-controls input,.backtest-controls select{width:100%;margin-top:5px;padding:10px;border-radius:8px;border:1px solid #40516a;background:#080e18;color:#fff}
+.backtest-controls input{width:100%;margin-top:5px;padding:10px;border-radius:8px;border:1px solid #40516a;background:#080e18;color:#fff}
 .periods{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:10px 0}
 .periods button{padding:10px 4px;font-size:12px;background:#26364b;color:#fff}
 .periods button.active{background:#00c853;color:#001b0a}
@@ -157,23 +157,34 @@ th{background:#202e42;color:#d8e5f5}
 <p class="small" id="bankChainStatus">Waiting for data...</p>
 </div>
 
+<!-- BACKTEST -->
 <div class="card" id="backtestCard">
 <h3>🧪 HISTORICAL BACKTEST</h3>
-<p class="small">एकाच कालावधीत BASELINE, ADVANCED आणि PRO या तीन 5-minute Spot Direction Strategies ची तुलना करा. हा निकाल Option Premium P&amp;L नाही.</p>
+<p class="small">एकाच कालावधीत BASELINE, ADVANCED, PRO आणि HYBRID PRO या चार 5-minute Spot Direction Strategies ची तुलना करा. हा निकाल Option Premium P&amp;L नाही.</p>
+
 <div class="periods">
 <button type="button" class="active" data-period="1">1 DAY</button>
 <button type="button" data-period="7">7 DAYS</button>
 <button type="button" data-period="15">15 DAYS</button>
 <button type="button" data-period="30">1 MONTH</button>
 </div>
+
 <div class="backtest-controls">
 <label>From Date<input type="date" id="btFrom"></label>
 <label>To Date<input type="date" id="btTo"></label>
 </div>
+
 <button type="button" id="runBacktestBtn" onclick="runBacktest()">▶ RUN BACKTEST</button>
 <div class="bt-status" id="btStatus">Select a period or date range and run backtest.</div>
 <div id="btResults"></div>
-<p class="note">Accuracy = Wins ÷ (Wins + Losses). Flat trades वगळले आहेत. ADVANCED: ADX ≥ 20, completed 15m EMA trend alignment, volume ≥ 1.2x मागील 20 candles ची average. PRO: ADVANCED + ATR ≥ 14-period ATR average + पहिल्या 15 मिनिटांचा High/Low breakout. हा फक्त Spot direction backtest आहे; Option Premium P&amp;L, OI history, brokerage आणि slippage समाविष्ट नाहीत. मागील निकाल भविष्यातील नफ्याची हमी देत नाही.</p>
+
+<p class="note">
+Accuracy = Wins ÷ (Wins + Losses). Flat trades वगळले आहेत.
+ADVANCED: ADX ≥ 20, completed 15m EMA trend alignment, volume ≥ 1.2x मागील 20 candles ची average.
+PRO: ADVANCED + ATR ≥ 14-period ATR average + पहिल्या 15 मिनिटांचा High/Low breakout.
+HYBRID PRO: BASELINE अनिवार्य + ADX, 15m Trend, Volume यांपैकी किमान 2 पुष्टीकरणे.
+हा फक्त Spot direction backtest आहे; Option Premium P&amp;L, OI history, brokerage आणि slippage समाविष्ट नाहीत. मागील निकाल भविष्यातील नफ्याची हमी देत नाही.
+</p>
 </div>
 
 <div class="card">
@@ -195,7 +206,9 @@ function fmt(v){
  return Number(v).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2});
 }
 function num(v){return Number.isFinite(Number(v))?Number(v):0}
-function vol(v){return v===null||v===undefined||!Number.isFinite(Number(v))?"--":Number(v).toLocaleString("en-IN")}
+function vol(v){
+ return v===null||v===undefined||!Number.isFinite(Number(v))?"--":Number(v).toLocaleString("en-IN");
+}
 function changeText(id,c,p){
  let x=$(id);
  if(c==null){x.textContent="--";return}
@@ -234,11 +247,13 @@ function chainView(c,spot,prefix,step){
  let strikes=[atm-2*step,atm-step,atm,atm+step,atm+2*step];
  $(prefix+"ATM").textContent=vol(atm);
  $(prefix+"Expiry").textContent="Expiry: "+expiryOf(c);
+
  function cells(o,t){
   if(!o)return "<td>--</td><td>--</td><td>--</td><td>--</td>";
   let ch=num(o.oich);
   return '<td class="'+t+'">'+fmt(o.ltp)+'</td><td>'+vol(o.oi)+'</td><td class="'+(ch>0?"green":ch<0?"red":"")+'">'+(ch>0?"+":"")+vol(ch)+'</td><td>'+vol(o.volume)+'</td>';
  }
+
  $(prefix+"Chain").innerHTML=strikes.map(s=>'<tr class="'+(s===atm?"atm":"")+'">'+cells(get(s,"CE"),"ce")+'<td class="strike">'+vol(s)+'</td>'+cells(get(s,"PE"),"pe")+'</tr>').join("");
  let count=strikes.filter(s=>get(s,"CE")||get(s,"PE")).length;
  $(prefix+"ChainStatus").textContent="Showing "+count+" of 5 nearby strikes.";
@@ -275,13 +290,17 @@ function signal(p,ind,cd,fresh){
  if(!fresh){waitSignal(p,"Data timestamp older than 10 minutes — no trade");return}
  if(ind.candles<30){waitSignal(p,"At least 30 five-minute candles required");return}
  if(!cd){waitSignal(p,"Option chain unavailable");return}
+
  let bull=ind.e9>ind.e20&&ind.spot>ind.vwap&&ind.rsi>=55&&ind.rsi<=68;
  let bear=ind.e9<ind.e20&&ind.spot<ind.vwap&&ind.rsi>=32&&ind.rsi<=45;
- let oi=oiBias(cd),dir=bull&&oi==="BULL"?"CE":bear&&oi==="BEAR"?"PE":null;
+ let oi=oiBias(cd);
+ let dir=bull&&oi==="BULL"?"CE":bear&&oi==="BEAR"?"PE":null;
  let score=(bull||bear?2:0)+((bull&&ind.rsi>=55&&ind.rsi<=68)||(bear&&ind.rsi>=32&&ind.rsi<=45)?1:0)+(ind.volume>0?1:0)+(["BULL","BEAR"].includes(oi)?1:0);
+
  if(!dir){waitSignal(p,"No full EMA + VWAP + RSI + OI confirmation. OI: "+oi,score);return}
  let opt=cd.get(cd.atm,dir),entry=opt?Number(opt.ltp):NaN;
  if(!Number.isFinite(entry)||entry<=0){waitSignal(p,"ATM "+dir+" LTP missing; premium not estimated",score);return}
+
  $(p+"Signal").textContent="BUY "+dir;
  $(p+"Signal").className="tag "+(dir==="CE"?"signal-ce":"signal-pe");
  $(p+"Contract").textContent=vol(cd.atm)+" "+dir+" | Expiry "+cd.expiry;
@@ -355,7 +374,7 @@ function loadMarketData(){
 }
 loadMarketData();
 
-// ---------------- HISTORICAL BACKTEST UI ----------------
+// HISTORICAL BACKTEST
 
 function localISODate(d){
  const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,"0"),day=String(d.getDate()).padStart(2,"0");
@@ -382,7 +401,10 @@ function btNum(v){
 function renderOneStrategy(x,label){
  if(!x)return '<p class="bt-status">No result returned.</p>';
  const acc=x.directionalAccuracy==null?"--":Number(x.directionalAccuracy).toFixed(2)+"%";
- const rows=(x.trades||[]).map(t=>'<tr><td>'+t.number+'</td><td>'+t.date+'</td><td class="'+(t.signal==="BUY CE"?"ce":"pe")+'">'+t.signal+'</td><td>'+btNum(t.entrySpot)+'</td><td>'+btNum(t.exitSpot)+'</td><td>'+btNum(t.spotChange)+'</td><td>'+btNum(t.adx)+'</td><td>'+btNum(t.atr)+'</td><td>'+btNum(t.volumeAverage)+'</td><td>'+t.trend15+'</td><td class="'+(t.outcome==="WIN"?"bt-win":t.outcome==="LOSS"?"bt-loss":"")+'">'+t.outcome+'</td></tr>').join("");
+ const rows=(x.trades||[]).map(t=>
+  '<tr><td>'+t.number+'</td><td>'+t.date+'</td><td class="'+(t.signal==="BUY CE"?"ce":"pe")+'">'+t.signal+'</td><td>'+btNum(t.entrySpot)+'</td><td>'+btNum(t.exitSpot)+'</td><td>'+btNum(t.spotChange)+'</td><td>'+btNum(t.adx)+'</td><td>'+btNum(t.atr)+'</td><td>'+btNum(t.volumeAverage)+'</td><td>'+t.trend15+'</td><td class="'+(t.outcome==="WIN"?"bt-win":t.outcome==="LOSS"?"bt-loss":"")+'">'+t.outcome+'</td></tr>'
+ ).join("");
+
  return '<div class="bt-result"><h4>'+label+'</h4><div class="bt-summary">'+
  '<div class="bt-box"><span>Total Signals</span><b>'+btNum(x.totalSignals)+'</b></div>'+
  '<div class="bt-box"><span>Directional Accuracy</span><b>'+acc+'</b></div>'+
@@ -398,36 +420,30 @@ function renderBacktestSymbol(x){
  if(!x)return '<p class="bt-status">No result returned.</p>';
  return '<div class="bt-result"><h3>'+((x.legacy&&x.legacy.symbol)||"Symbol")+' — Strategy Comparison</h3>'+
  '<div class="table-wrap"><table class="bt-table"><thead><tr><th>Strategy</th><th>Signals</th><th>Accuracy</th><th>Wins</th><th>Losses</th><th>Flats</th></tr></thead><tbody>'+
- ['legacy','advanced','pro'].map(k=>{
-  const v=x[k]||{},name=k==="legacy"?"BASELINE":k==="advanced"?"ADVANCED":"PRO";
+ ['legacy','advanced','pro','hybrid'].map(k=>{
+  const v=x[k]||{};
+  const name=k==="legacy"?"BASELINE":k==="advanced"?"ADVANCED":k==="pro"?"PRO":"HYBRID PRO";
   return '<tr><td><b>'+name+'</b></td><td>'+btNum(v.totalSignals)+'</td><td><b>'+(v.directionalAccuracy==null?"--":Number(v.directionalAccuracy).toFixed(2)+"%")+'</b></td><td class="bt-win">'+btNum(v.wins)+'</td><td class="bt-loss">'+btNum(v.losses)+'</td><td>'+btNum(v.flats)+'</td></tr>';
  }).join('')+
  '</tbody></table></div>'+
  renderOneStrategy(x.legacy,"BASELINE — Existing EMA/VWAP/RSI")+
  renderOneStrategy(x.advanced,"ADVANCED — ADX + 15m Trend + Volume")+
  renderOneStrategy(x.pro,"PRO — Advanced + ATR + Opening Range Breakout")+
+ renderOneStrategy(x.hybrid,"HYBRID PRO — Baseline + any 2 of ADX / 15m Trend / Volume")+
  '</div>';
 }
 
 function runBacktest(){
  const from=$("btFrom").value,to=$("btTo").value;
- if(!from||!to){
-  $("btStatus").textContent="Please select both dates.";
-  return;
- }
- if(from>to){
-  $("btStatus").textContent="From Date must be before To Date.";
-  return;
- }
+ if(!from||!to){$("btStatus").textContent="Please select both dates.";return}
+ if(from>to){$("btStatus").textContent="From Date must be before To Date.";return}
  const days=Math.round((new Date(to+"T00:00:00")-new Date(from+"T00:00:00"))/86400000)+1;
- if(days>31){
-  $("btStatus").textContent="Maximum 31 calendar days per request. Choose a shorter range.";
-  return;
- }
+ if(days>31){$("btStatus").textContent="Maximum 31 calendar days per request. Choose a shorter range.";return}
  if(new Date(to+"T00:00:00")>=new Date(localISODate(new Date())+"T00:00:00")){
   $("btStatus").textContent="To Date must be before today because only completed historical dates are supported.";
   return;
  }
+
  const btn=$("runBacktestBtn");
  btn.disabled=true;
  btn.textContent="LOADING...";
@@ -436,6 +452,7 @@ function runBacktest(){
  const old=$("btJsonp");
  if(old)old.remove();
  const cb="backtestCallback_"+Date.now();
+
  window[cb]=d=>{
   try{
    if(!d||d.status!=="SUCCESS"){
@@ -452,6 +469,7 @@ function runBacktest(){
    if(el)el.remove();
   }
  };
+
  const script=document.createElement("script");
  script.id="btJsonp";
  script.onerror=()=>{
@@ -464,8 +482,6 @@ function runBacktest(){
  script.src=API_URL+"?mode=backtest&from="+encodeURIComponent(from)+"&to="+encodeURIComponent(to)+"&callback="+cb+"&_="+Date.now();
  document.body.appendChild(script);
 }
-
-// -----------------------------------------------------
 </script>
 </body>
 </html>
