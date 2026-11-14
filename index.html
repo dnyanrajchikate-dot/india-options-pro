@@ -5,6 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>INDIA OPTIONS PRO</title>
+
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#080e18;color:white;font-family:Arial;padding:16px}
@@ -18,10 +19,12 @@ h2{color:#00e676;text-align:center}
 .green{color:#00e676}
 .red{color:#ff5252}
 button{width:100%;padding:14px;background:#00c853;color:#001b0a;border:0;border-radius:10px;font-weight:bold;font-size:16px}
+button:disabled{opacity:.5}
 .small{font-size:12px;color:#9aa7b8;line-height:1.5}
-.note{font-size:12px;color:#ffd65a}
+.note{font-size:12px;color:#ffd65a;line-height:1.5}
 </style>
 </head>
+
 <body>
 
 <h2>⚡ INDIA OPTIONS PRO</h2>
@@ -29,132 +32,360 @@ button{width:100%;padding:14px;background:#00c853;color:#001b0a;border:0;border-
 
 <div class="card">
 <h3>📊 NIFTY 50</h3>
-<div class="row"><span>Spot Price</span><b class="price" id="niftyPrice">--</b></div>
-<div class="row"><span>Change</span><b id="niftyChange">--</b></div>
-<div class="row"><span>EMA 9 / EMA 20</span><b>Not connected</b></div>
-<div class="row"><span>VWAP</span><b>Not connected</b></div>
-<div class="row"><span>RSI</span><b>Not connected</b></div>
-<div class="row"><span>Volume</span><b>Not connected</b></div>
-<div class="row"><span>Signal</span><span class="tag wait">WAIT</span></div>
+
+<div class="row">
+<span>Spot Price</span>
+<b class="price" id="niftyPrice">--</b>
 </div>
+
+<div class="row">
+<span>Change</span>
+<b id="niftyChange">--</b>
+</div>
+
+<div class="row">
+<span>EMA 9 / EMA 20</span>
+<b id="niftyEMA">-- / --</b>
+</div>
+
+<div class="row">
+<span>EMA Trend</span>
+<b id="niftyTrend">--</b>
+</div>
+
+<div class="row">
+<span>VWAP</span>
+<b>Pending</b>
+</div>
+
+<div class="row">
+<span>RSI</span>
+<b>Pending</b>
+</div>
+
+<div class="row">
+<span>Volume</span>
+<b>Pending</b>
+</div>
+
+<div class="row">
+<span>Signal</span>
+<span class="tag wait" id="niftySignal">WAIT</span>
+</div>
+</div>
+
 
 <div class="card">
 <h3>🏦 BANK NIFTY</h3>
-<div class="row"><span>Spot Price</span><b class="price" id="bankPrice">--</b></div>
-<div class="row"><span>Change</span><b id="bankChange">--</b></div>
-<div class="row"><span>EMA 9 / EMA 20</span><b>Not connected</b></div>
-<div class="row"><span>VWAP</span><b>Not connected</b></div>
-<div class="row"><span>RSI</span><b>Not connected</b></div>
-<div class="row"><span>Volume</span><b>Not connected</b></div>
-<div class="row"><span>Signal</span><span class="tag wait">WAIT</span></div>
+
+<div class="row">
+<span>Spot Price</span>
+<b class="price" id="bankPrice">--</b>
 </div>
+
+<div class="row">
+<span>Change</span>
+<b id="bankChange">--</b>
+</div>
+
+<div class="row">
+<span>EMA 9 / EMA 20</span>
+<b id="bankEMA">-- / --</b>
+</div>
+
+<div class="row">
+<span>EMA Trend</span>
+<b id="bankTrend">--</b>
+</div>
+
+<div class="row">
+<span>VWAP</span>
+<b>Pending</b>
+</div>
+
+<div class="row">
+<span>RSI</span>
+<b>Pending</b>
+</div>
+
+<div class="row">
+<span>Volume</span>
+<b>Pending</b>
+</div>
+
+<div class="row">
+<span>Signal</span>
+<span class="tag wait" id="bankSignal">WAIT</span>
+</div>
+</div>
+
 
 <div class="card">
 <h3>🎯 OPTION TRADE</h3>
+
 <div class="row"><span>Option</span><b>--</b></div>
 <div class="row"><span>ATM Strike</span><b>--</b></div>
 <div class="row"><span>Entry</span><b>--</b></div>
 <div class="row"><span>Stop Loss</span><b class="red">--</b></div>
 <div class="row"><span>Target 1</span><b class="green">--</b></div>
 <div class="row"><span>Target 2</span><b class="green">--</b></div>
-<p class="small">Option signals are not connected yet.</p>
+
+<p class="small">Option chain and trade levels are not connected yet.</p>
 </div>
+
 
 <div class="card">
 <h3>📡 LIVE STATUS</h3>
-<div class="row"><span>Data Connection</span><b id="connection">Checking...</b></div>
-<div class="row"><span>Last Updated</span><b id="updated">--</b></div>
-<button onclick="loadMarketData()" id="refreshBtn">↻ REFRESH DATA</button>
-<p class="small" id="message">Connecting to FYERS...</p>
-<p class="note">Market closed असताना शेवटचे उपलब्ध भाव दिसू शकतात. ट्रेड करण्यापूर्वी भाव तपासा.</p>
+
+<div class="row">
+<span>Data Connection</span>
+<b id="connection">Checking...</b>
 </div>
 
+<div class="row">
+<span>Last Updated</span>
+<b id="updated">--</b>
+</div>
+
+<button onclick="loadMarketData()" id="refreshBtn">
+↻ REFRESH DATA
+</button>
+
+<p class="small" id="message">Connecting to FYERS...</p>
+
+<p class="note">
+Market बंद असताना शेवटचे उपलब्ध भाव दिसू शकतात.
+EMA Trend हा फक्त indicator आहे; तो स्वतःहून BUY किंवा SELL सिग्नल नाही.
+ट्रेड करण्यापूर्वी Live Market तपासा.
+</p>
+</div>
+
+
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbz_e3MeV0iZrtifCJLsDWV9l7FOT3aRDxn6TwduPipWsEP7ZPtcOyup9bIZY6fDddgl/exec";
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycbz_e3MeV0iZrtifCJLsDWV9l7FOT3aRDxn6TwduPipWsEP7ZPtcOyup9bIZY6fDddgl/exec";
+
 
 function fmt(v){
+
   if(v===null || v===undefined) return "--";
+
   return Number(v).toLocaleString("en-IN",{
     minimumFractionDigits:2,
     maximumFractionDigits:2
   });
+
 }
 
+
 function changeText(id,c,p){
+
   const el=document.getElementById(id);
+
   if(c===null || c===undefined){
     el.textContent="--";
     return;
   }
+
   const positive=Number(c)>=0;
+
   el.textContent=(positive?"+":"")+fmt(c)+
     " ("+(positive?"+":"")+Number(p||0).toFixed(2)+"%)";
+
   el.className=positive?"green":"red";
+
 }
 
+
+function showEMA(price,indicators,emaId,trendId,signalId){
+
+  const emaElement=document.getElementById(emaId);
+  const trendElement=document.getElementById(trendId);
+  const signalElement=document.getElementById(signalId);
+
+  if(!indicators ||
+     indicators.ema9===null ||
+     indicators.ema20===null){
+
+    emaElement.textContent="-- / --";
+    trendElement.textContent="Unavailable";
+    signalElement.textContent="WAIT";
+    return;
+  }
+
+  const ema9=Number(indicators.ema9);
+  const ema20=Number(indicators.ema20);
+
+  emaElement.textContent=
+    fmt(ema9)+" / "+fmt(ema20);
+
+  if(ema9>ema20){
+
+    trendElement.textContent="BULLISH";
+    trendElement.className="green";
+
+  }else if(ema9<ema20){
+
+    trendElement.textContent="BEARISH";
+    trendElement.className="red";
+
+  }else{
+
+    trendElement.textContent="NEUTRAL";
+    trendElement.className="";
+
+  }
+
+  // EMA trend only; not a trading recommendation
+  signalElement.textContent="WAIT";
+
+}
+
+
 function handleData(data){
-  document.getElementById("refreshBtn").disabled=false;
+
+  const btn=document.getElementById("refreshBtn");
+  btn.disabled=false;
 
   if(!data || data.status!=="CONNECTED"){
+
     document.getElementById("connection").textContent="ERROR";
+
     document.getElementById("message").textContent=
       data && data.message ? data.message : "Data unavailable";
+
     return;
   }
 
   document.getElementById("connection").textContent="CONNECTED";
 
+
   if(data.nifty){
-    document.getElementById("niftyPrice").textContent=fmt(data.nifty.price);
-    changeText("niftyChange",data.nifty.change,data.nifty.changePercent);
+
+    document.getElementById("niftyPrice").textContent=
+      fmt(data.nifty.price);
+
+    changeText(
+      "niftyChange",
+      data.nifty.change,
+      data.nifty.changePercent
+    );
+
   }
+
 
   if(data.banknifty){
-    document.getElementById("bankPrice").textContent=fmt(data.banknifty.price);
-    changeText("bankChange",data.banknifty.change,data.banknifty.changePercent);
+
+    document.getElementById("bankPrice").textContent=
+      fmt(data.banknifty.price);
+
+    changeText(
+      "bankChange",
+      data.banknifty.change,
+      data.banknifty.changePercent
+    );
+
   }
 
+
+  showEMA(
+    data.nifty ? data.nifty.price : null,
+    data.niftyIndicators,
+    "niftyEMA",
+    "niftyTrend",
+    "niftySignal"
+  );
+
+
+  showEMA(
+    data.banknifty ? data.banknifty.price : null,
+    data.bankniftyIndicators,
+    "bankEMA",
+    "bankTrend",
+    "bankSignal"
+  );
+
+
   document.getElementById("updated").textContent=
-    data.updated ? new Date(data.updated).toLocaleString("en-IN") : "--";
+    data.updated
+    ? new Date(data.updated).toLocaleString("en-IN")
+    : "--";
+
 
   document.getElementById("message").textContent=
-    "FYERS quotes received. Technical indicators are not connected yet.";
+    "FYERS quotes and EMA data received. " +
+    "5-minute candle count: NIFTY " +
+    (data.niftyIndicators ? data.niftyIndicators.candleCount : "--") +
+    ", BANKNIFTY " +
+    (data.bankniftyIndicators ? data.bankniftyIndicators.candleCount : "--");
+
 }
 
+
 function loadMarketData(){
+
   const btn=document.getElementById("refreshBtn");
+
   btn.disabled=true;
+
   document.getElementById("connection").textContent="Connecting...";
-  document.getElementById("message").textContent="Fetching quotes...";
+
+  document.getElementById("message").textContent=
+    "Fetching FYERS data...";
+
 
   const old=document.getElementById("fyersJsonp");
+
   if(old) old.remove();
+
 
   const callback="fyersCallback_"+Date.now();
 
+
   window[callback]=function(data){
+
     handleData(data);
+
     delete window[callback];
-    const s=document.getElementById("fyersJsonp");
-    if(s) s.remove();
+
+    const script=document.getElementById("fyersJsonp");
+
+    if(script) script.remove();
+
   };
+
 
   const script=document.createElement("script");
+
   script.id="fyersJsonp";
+
+
   script.onerror=function(){
+
     btn.disabled=false;
+
     document.getElementById("connection").textContent="ERROR";
+
     document.getElementById("message").textContent=
       "Connection failed. Check Apps Script deployment.";
+
     delete window[callback];
+
   };
 
-  script.src=API_URL+"?callback="+callback+"&_="+Date.now();
+
+  script.src=
+    API_URL+"?callback="+callback+"&_="+Date.now();
+
   document.body.appendChild(script);
+
 }
 
+
 loadMarketData();
+
 </script>
+
 </body>
 </html>
-      
