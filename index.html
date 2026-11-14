@@ -40,7 +40,7 @@ button:disabled{opacity:.5}
 <div class="row"><span>RSI 14</span><b id="niftyRSI">--</b></div>
 <div class="row"><span>Volume</span><b id="niftyVolume">--</b></div>
 <div class="row"><span>VWAP Session</span><b id="niftySession">--</b></div>
-<div class="row"><span>Signal</span><span class="tag wait" id="niftySignal">WAIT</span></div>
+<div class="row"><span>Trading Signal</span><span class="tag wait" id="niftySignal">WAIT</span></div>
 </div>
 
 <div class="card">
@@ -53,7 +53,7 @@ button:disabled{opacity:.5}
 <div class="row"><span>RSI 14</span><b id="bankRSI">--</b></div>
 <div class="row"><span>Volume</span><b id="bankVolume">--</b></div>
 <div class="row"><span>VWAP Session</span><b id="bankSession">--</b></div>
-<div class="row"><span>Signal</span><span class="tag wait" id="bankSignal">WAIT</span></div>
+<div class="row"><span>Trading Signal</span><span class="tag wait" id="bankSignal">WAIT</span></div>
 </div>
 
 <div class="card">
@@ -156,14 +156,16 @@ function showIndicators(data,price,prefix,emaId,trendId,signalId){
   const rsiEl=document.getElementById(prefix+"RSI");
   rsiEl.className=rsi>=70?"red":rsi<=30?"green":"";
 
-  // CE conditions
+  // BUY conditions
   if(e9>e20 && spot>vwap && rsi>=55 && rsi<=70){
-    setSignal("CE SIGNAL","signal-ce");
+    setSignal("BUY","signal-ce");
   }
-  // PE conditions
+
+  // SELL conditions
   else if(e9<e20 && spot<vwap && rsi>=30 && rsi<=45){
-    setSignal("PE SIGNAL","signal-pe");
+    setSignal("SELL","signal-pe");
   }
+
   // No complete setup
   else{
     setSignal("WAIT","wait");
