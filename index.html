@@ -2,144 +2,491 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>INDIA OPTIONS PRO</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#080e18;color:#fff;font-family:Arial;padding:12px;max-width:1100px;margin:auto}
-h2{color:#00e676;text-align:center}h3{margin:0 0 12px}.sub{text-align:center;color:#9aa7b8;font-size:13px}
+*{box-sizing:border-box}
+body{margin:0;background:#080e18;color:#fff;font-family:Arial;padding:12px;max-width:1100px;margin:auto}
+h2{color:#00e676;text-align:center}
+h3{margin:0 0 12px}
+.sub{text-align:center;color:#9aa7b8;font-size:13px}
 .card{background:#131e2e;border:1px solid #293950;border-radius:14px;padding:14px;margin:13px 0}
-.row{display:flex;justify-content:space-between;gap:10px;margin:12px 0;align-items:center;flex-wrap:wrap}.price{font-size:26px}
-.tag{padding:7px 12px;border-radius:8px;font-weight:bold}.wait{background:#554500;color:#ffe45c}.signal-ce{background:#064d2b;color:#00e676}.signal-pe{background:#591b26;color:#ff5252}
-.green{color:#00e676}.red{color:#ff5252}.small{font-size:12px;color:#9aa7b8;line-height:1.5}.note{font-size:12px;color:#ffd65a;line-height:1.5}
-button{padding:12px;border:0;border-radius:9px;font-weight:bold;width:100%;background:#00c853;color:#001b0a;font-size:15px}button:disabled{opacity:.5}
-.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:650px;font-size:12px}th,td{padding:9px 6px;text-align:center;border-bottom:1px solid #293950;white-space:nowrap}th{background:#202e42;color:#d8e5f5}
-.atm{background:#273b30}.strike{font-weight:bold;color:#ffd65a}.ce{color:#00e676}.pe{color:#ff7373}
-.section-title,.signal-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}.expiry{color:#ffd65a;font-size:12px}
-.trade-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}.trade-cell{background:#202e42;padding:10px;border-radius:9px}.trade-cell span{display:block;color:#9aa7b8;font-size:11px;margin-bottom:5px}.trade-cell b{font-size:16px}
-@media(min-width:800px){.trade-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.row{display:flex;justify-content:space-between;gap:10px;margin:12px 0;align-items:center;flex-wrap:wrap}
+.price{font-size:26px}
+.tag{padding:7px 12px;border-radius:8px;font-weight:bold}
+.wait{background:#554500;color:#ffe45c}
+.signal-ce{background:#064d2b;color:#00e676}
+.signal-pe{background:#591b26;color:#ff5252}
+.green{color:#00e676}
+.red{color:#ff5252}
+.small{font-size:12px;color:#9aa7b8;line-height:1.5}
+.note{font-size:12px;color:#ffd65a;line-height:1.5}
+button{padding:12px;border:0;border-radius:9px;font-weight:bold;width:100%;background:#00c853;color:#001b0a;font-size:15px}
+button:disabled{opacity:.5}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:650px;font-size:12px}
+th,td{padding:9px 6px;text-align:center;border-bottom:1px solid #293950;white-space:nowrap}
+th{background:#202e42;color:#d8e5f5}
+.atm{background:#273b30}
+.strike{font-weight:bold;color:#ffd65a}
+.ce{color:#00e676}
+.pe{color:#ff7373}
+.trade-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}
+.trade-cell{background:#202e42;padding:10px;border-radius:9px}
+.trade-cell span{display:block;color:#9aa7b8;font-size:11px;margin-bottom:5px}
+.trade-cell b{font-size:16px}
+.backtest-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0}
+.backtest-controls label{font-size:12px;color:#9aa7b8;display:block}
+.backtest-controls input{width:100%;margin-top:5px;padding:10px;border-radius:8px;border:1px solid #40516a;background:#080e18;color:#fff}
+.periods{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:10px 0}
+.periods button{padding:10px 4px;font-size:12px;background:#26364b;color:#fff}
+.periods button.active{background:#00c853;color:#001b0a}
+.bt-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}
+.bt-box{background:#202e42;border-radius:9px;padding:10px}
+.bt-box span{display:block;font-size:11px;color:#9aa7b8;margin-bottom:5px}
+.bt-box b{font-size:18px}
+.bt-result{margin-top:14px}
+.bt-result h4{margin:10px 0}
+.bt-status{font-size:12px;color:#9aa7b8;line-height:1.5;margin:8px 0}
+.bt-table{min-width:850px}
+.bt-table td,.bt-table th{font-size:11px;padding:8px 5px}
+.bt-win{color:#00e676;font-weight:bold}
+.bt-loss{color:#ff5252;font-weight:bold}
+@media(min-width:800px){
+.trade-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
 </style>
 </head>
+
 <body>
-<h2>⚡ INDIA OPTIONS PRO</h2><div class="sub">NIFTY • BANKNIFTY | 5 MIN CHART | RULE-BASED SIGNALS</div>
 
-<div class="card"><h3>📊 NIFTY 50</h3>
+<h2>⚡ INDIA OPTIONS PRO</h2>
+<div class="sub">NIFTY • BANKNIFTY | 5 MIN CHART | RULE-BASED SIGNALS</div>
+
+<div class="card">
+<h3>📊 NIFTY 50</h3>
 <div class="row"><span>Spot Price</span><b class="price" id="niftyPrice">--</b></div>
-<div class="row"><span>Change</span><b id="niftyChange">--</b></div><div class="row"><span>EMA 9 / EMA 20</span><b id="niftyEMA">-- / --</b></div>
-<div class="row"><span>EMA Trend</span><b id="niftyTrend">--</b></div><div class="row"><span>VWAP</span><b id="niftyVWAP">--</b></div>
-<div class="row"><span>RSI 14</span><b id="niftyRSI">--</b></div><div class="row"><span>Volume</span><b id="niftyVolume">--</b></div>
-<div class="row"><span>VWAP Session</span><b id="niftySession">--</b></div></div>
+<div class="row"><span>Change</span><b id="niftyChange">--</b></div>
+<div class="row"><span>EMA 9 / EMA 20</span><b id="niftyEMA">-- / --</b></div>
+<div class="row"><span>EMA Trend</span><b id="niftyTrend">--</b></div>
+<div class="row"><span>VWAP</span><b id="niftyVWAP">--</b></div>
+<div class="row"><span>RSI 14</span><b id="niftyRSI">--</b></div>
+<div class="row"><span>Volume</span><b id="niftyVolume">--</b></div>
+<div class="row"><span>VWAP Session</span><b id="niftySession">--</b></div>
+</div>
 
-<div class="card"><h3>🏦 BANK NIFTY</h3>
+<div class="card">
+<h3>🏦 BANK NIFTY</h3>
 <div class="row"><span>Spot Price</span><b class="price" id="bankPrice">--</b></div>
-<div class="row"><span>Change</span><b id="bankChange">--</b></div><div class="row"><span>EMA 9 / EMA 20</span><b id="bankEMA">-- / --</b></div>
-<div class="row"><span>EMA Trend</span><b id="bankTrend">--</b></div><div class="row"><span>VWAP</span><b id="bankVWAP">--</b></div>
-<div class="row"><span>RSI 14</span><b id="bankRSI">--</b></div><div class="row"><span>Volume</span><b id="bankVolume">--</b></div>
-<div class="row"><span>VWAP Session</span><b id="bankSession">--</b></div></div>
+<div class="row"><span>Change</span><b id="bankChange">--</b></div>
+<div class="row"><span>EMA 9 / EMA 20</span><b id="bankEMA">-- / --</b></div>
+<div class="row"><span>EMA Trend</span><b id="bankTrend">--</b></div>
+<div class="row"><span>VWAP</span><b id="bankVWAP">--</b></div>
+<div class="row"><span>RSI 14</span><b id="bankRSI">--</b></div>
+<div class="row"><span>Volume</span><b id="bankVolume">--</b></div>
+<div class="row"><span>VWAP Session</span><b id="bankSession">--</b></div>
+</div>
 
-<div class="card"><div class="signal-head"><h3>🎯 NIFTY OPTION SIGNAL</h3><span class="tag wait" id="niftySignal">WAIT</span></div>
-<div class="row"><span>Recommended Contract</span><b id="niftyContract">--</b></div><div class="row"><span>Signal Strength</span><b id="niftyStrength">0 / 5</b></div>
+<div class="card">
+<div class="row">
+<h3>🎯 NIFTY OPTION SIGNAL</h3>
+<span class="tag wait" id="niftySignal">WAIT</span>
+</div>
+<div class="row"><span>Recommended Contract</span><b id="niftyContract">--</b></div>
+<div class="row"><span>Signal Strength</span><b id="niftyStrength">0 / 5</b></div>
 <div class="row"><span>Confirmation</span><b id="niftyReason" class="small">Waiting for data</b></div>
-<div class="trade-grid"><div class="trade-cell"><span>Entry Premium</span><b id="niftyEntry">--</b></div><div class="trade-cell"><span>Stop Loss</span><b class="red" id="niftySL">--</b></div><div class="trade-cell"><span>Target 1</span><b class="green" id="niftyT1">--</b></div><div class="trade-cell"><span>Target 2</span><b class="green" id="niftyT2">--</b></div></div>
-<p class="small">Rule-based estimate only. Confirm live premium and contract on Angel One before any manual trade.</p></div>
+<div class="trade-grid">
+<div class="trade-cell"><span>Entry Premium</span><b id="niftyEntry">--</b></div>
+<div class="trade-cell"><span>Stop Loss</span><b class="red" id="niftySL">--</b></div>
+<div class="trade-cell"><span>Target 1</span><b class="green" id="niftyT1">--</b></div>
+<div class="trade-cell"><span>Target 2</span><b class="green" id="niftyT2">--</b></div>
+</div>
+<p class="small">Rule-based estimate only. Confirm live premium and contract on Angel One before any manual trade.</p>
+</div>
 
-<div class="card"><div class="signal-head"><h3>🎯 BANKNIFTY OPTION SIGNAL</h3><span class="tag wait" id="bankSignal">WAIT</span></div>
-<div class="row"><span>Recommended Contract</span><b id="bankContract">--</b></div><div class="row"><span>Signal Strength</span><b id="bankStrength">0 / 5</b></div>
+<div class="card">
+<div class="row">
+<h3>🎯 BANKNIFTY OPTION SIGNAL</h3>
+<span class="tag wait" id="bankSignal">WAIT</span>
+</div>
+<div class="row"><span>Recommended Contract</span><b id="bankContract">--</b></div>
+<div class="row"><span>Signal Strength</span><b id="bankStrength">0 / 5</b></div>
 <div class="row"><span>Confirmation</span><b id="bankReason" class="small">Waiting for data</b></div>
-<div class="trade-grid"><div class="trade-cell"><span>Entry Premium</span><b id="bankEntry">--</b></div><div class="trade-cell"><span>Stop Loss</span><b class="red" id="bankSL">--</b></div><div class="trade-cell"><span>Target 1</span><b class="green" id="bankT1">--</b></div><div class="trade-cell"><span>Target 2</span><b class="green" id="bankT2">--</b></div></div>
-<p class="small">Rule-based estimate only. Confirm live premium and contract on Angel One before any manual trade.</p></div>
+<div class="trade-grid">
+<div class="trade-cell"><span>Entry Premium</span><b id="bankEntry">--</b></div>
+<div class="trade-cell"><span>Stop Loss</span><b class="red" id="bankSL">--</b></div>
+<div class="trade-cell"><span>Target 1</span><b class="green" id="bankT1">--</b></div>
+<div class="trade-cell"><span>Target 2</span><b class="green" id="bankT2">--</b></div>
+</div>
+<p class="small">Rule-based estimate only. Confirm live premium and contract on Angel One before any manual trade.</p>
+</div>
 
-<div class="card"><div class="section-title"><h3>📈 NIFTY OPTION CHAIN</h3><span class="expiry" id="niftyExpiry">Expiry: --</span></div>
-<div class="row"><span>ATM Strike</span><b id="niftyATM">--</b></div><div class="table-wrap"><table>
-<thead><tr><th colspan="4" class="ce">CALL (CE)</th><th class="strike">STRIKE</th><th colspan="4" class="pe">PUT (PE)</th></tr><tr><th>LTP</th><th>OI</th><th>OI CHG</th><th>VOL</th><th>PRICE</th><th>LTP</th><th>OI</th><th>OI CHG</th><th>VOL</th></tr></thead>
-<tbody id="niftyChain"><tr><td colspan="9">Loading...</td></tr></tbody></table></div><p class="small" id="niftyChainStatus">Waiting for data...</p></div>
+<div class="card">
+<h3>📈 NIFTY OPTION CHAIN</h3>
+<div class="row"><span>Expiry</span><b id="niftyExpiry">--</b></div>
+<div class="row"><span>ATM Strike</span><b id="niftyATM">--</b></div>
+<div class="table-wrap">
+<table>
+<thead>
+<tr><th colspan="4" class="ce">CALL (CE)</th><th class="strike">STRIKE</th><th colspan="4" class="pe">PUT (PE)</th></tr>
+<tr><th>LTP</th><th>OI</th><th>OI CHG</th><th>VOL</th><th>PRICE</th><th>LTP</th><th>OI</th><th>OI CHG</th><th>VOL</th></tr>
+</thead>
+<tbody id="niftyChain"><tr><td colspan="9">Loading...</td></tr></tbody>
+</table>
+</div>
+<p class="small" id="niftyChainStatus">Waiting for data...</p>
+</div>
 
-<div class="card"><div class="section-title"><h3>🏦 BANKNIFTY OPTION CHAIN</h3><span class="expiry" id="bankExpiry">Expiry: --</span></div>
-<div class="row"><span>ATM Strike</span><b id="bankATM">--</b></div><div class="table-wrap"><table>
-<thead><tr><th colspan="4" class="ce">CALL (CE)</th><th class="strike">STRIKE</th><th colspan="4" class="pe">PUT (PE)</th></tr><tr><th>LTP</th><th>OI</th><th>OI CHG</th><th>VOL</th><th>PRICE</th><th>LTP</th><th>OI</th><th>OI CHG</th><th>VOL</th></tr></thead>
-<tbody id="bankChain"><tr><td colspan="9">Loading...</td></tr></tbody></table></div><p class="small" id="bankChainStatus">Waiting for data...</p></div>
+<div class="card">
+<h3>🏦 BANKNIFTY OPTION CHAIN</h3>
+<div class="row"><span>Expiry</span><b id="bankExpiry">--</b></div>
+<div class="row"><span>ATM Strike</span><b id="bankATM">--</b></div>
+<div class="table-wrap">
+<table>
+<thead>
+<tr><th colspan="4" class="ce">CALL (CE)</th><th class="strike">STRIKE</th><th colspan="4" class="pe">PUT (PE)</th></tr>
+<tr><th>LTP</th><th>OI</th><th>OI CHG</th><th>VOL</th><th>PRICE</th><th>LTP</th><th>OI</th><th>OI CHG</th><th>VOL</th></tr>
+</thead>
+<tbody id="bankChain"><tr><td colspan="9">Loading...</td></tr></tbody>
+</table>
+</div>
+<p class="small" id="bankChainStatus">Waiting for data...</p>
+</div>
 
-<div class="card"><h3>📡 LIVE STATUS</h3><div class="row"><span>Data Connection</span><b id="connection">Checking...</b></div>
-<div class="row"><span>Last Updated</span><b id="updated">--</b></div><button onclick="loadMarketData()" id="refreshBtn">↻ REFRESH DATA</button>
-<p class="small" id="message">Connecting to FYERS...</p><p class="note">Market बंद असताना शेवटचे उपलब्ध भाव दिसू शकतात. API timestamp 10 मिनिटांपेक्षा जुना असल्यास Signal WAIT राहील. SL/Targets हे premium चे टक्केवारीवर आधारित illustrative levels आहेत; slippage, charges आणि volatility यात समाविष्ट नाहीत. Live order आधी Angel One वर expiry, strike आणि premium तपासा. हा dashboard order place करत नाही.</p></div>
+<div class="card" id="backtestCard">
+<h3>🧪 HISTORICAL BACKTEST</h3>
+<p class="small">NIFTY आणि BANKNIFTY साठी 5-minute Spot Direction strategy तपासा. हा निकाल Option Premium P&amp;L नाही.</p>
+
+<div class="periods">
+<button type="button" class="active" data-period="1">1 DAY</button>
+<button type="button" data-period="7">7 DAYS</button>
+<button type="button" data-period="15">15 DAYS</button>
+<button type="button" data-period="30">1 MONTH</button>
+</div>
+
+<div class="backtest-controls">
+<label>From Date<input type="date" id="btFrom"></label>
+<label>To Date<input type="date" id="btTo"></label>
+</div>
+
+<button type="button" id="runBacktestBtn" onclick="runBacktest()">▶ RUN BACKTEST</button>
+<div class="bt-status" id="btStatus">Select a period or date range and run backtest.</div>
+<div id="btResults"></div>
+
+<p class="note">Accuracy = Wins ÷ (Wins + Losses). Flat trades accuracy calculation मधून वगळले आहेत. हा फक्त Spot direction backtest आहे; brokerage, slippage, option premium आणि OI history समाविष्ट नाही. मागील निकाल भविष्यातील नफ्याची हमी देत नाही.</p>
+</div>
+
+<div class="card">
+<h3>📡 LIVE STATUS</h3>
+<div class="row"><span>Data Connection</span><b id="connection">Checking...</b></div>
+<div class="row"><span>Last Updated</span><b id="updated">--</b></div>
+<button onclick="loadMarketData()" id="refreshBtn">↻ REFRESH DATA</button>
+<p class="small" id="message">Connecting to FYERS...</p>
+<p class="note">Market बंद असताना शेवटचे उपलब्ध भाव दिसू शकतात. API timestamp 10 मिनिटांपेक्षा जुना असल्यास Signal WAIT राहील. SL/Targets हे premium चे टक्केवारीवर आधारित illustrative levels आहेत; slippage, charges आणि volatility यात समाविष्ट नाहीत. Live order आधी Angel One वर expiry, strike आणि premium तपासा. हा dashboard order place करत नाही.</p>
+</div>
 
 <script>
 const API_URL="https://script.google.com/macros/s/AKfycbz_e3MeV0iZrtifCJLsDWV9l7FOT3aRDxn6TwduPipWsEP7ZPtcOyup9bIZY6fDddgl/exec";
 const MAX_AGE_MIN=10,SL_PCT=.20,T1_PCT=.25,T2_PCT=.50;
 const $=id=>document.getElementById(id);
-function fmt(v){if(v===null||v===undefined||!Number.isFinite(Number(v)))return "--";return Number(v).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2});}
+
+function fmt(v){
+if(v===null||v===undefined||!Number.isFinite(Number(v)))return "--";
+return Number(v).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2});
+}
 function num(v){return Number.isFinite(Number(v))?Number(v):0}
 function vol(v){return v===null||v===undefined||!Number.isFinite(Number(v))?"--":Number(v).toLocaleString("en-IN")}
-function changeText(id,c,p){let x=$(id);if(c==null){x.textContent="--";return}let up=num(c)>=0;x.textContent=(up?"+":"")+fmt(c)+" ("+(up?"+":"")+num(p).toFixed(2)+"%)";x.className=up?"green":"red"}
+
+function changeText(id,c,p){
+let x=$(id);
+if(c==null){x.textContent="--";return}
+let up=num(c)>=0;
+x.textContent=(up?"+":"")+fmt(c)+" ("+(up?"+":"")+num(p).toFixed(2)+"%)";
+x.className=up?"green":"red";
+}
 
 function readIndicators(d,spot,prefix){
- if(!d||d.ema9==null||d.ema20==null||d.vwap==null||d.rsi14==null||spot==null)return null;
- let v={e9:num(d.ema9),e20:num(d.ema20),vwap:num(d.vwap),rsi:num(d.rsi14),spot:num(spot),volume:num(d.volume),candles:num(d.candleCount)};
- if(![v.e9,v.e20,v.vwap,v.rsi,v.spot].every(Number.isFinite))return null;
- $(prefix+"EMA").textContent=fmt(v.e9)+" / "+fmt(v.e20);
- $(prefix+"Trend").textContent=v.e9>v.e20?"BULLISH":v.e9<v.e20?"BEARISH":"NEUTRAL";
- $(prefix+"Trend").className=v.e9>v.e20?"green":v.e9<v.e20?"red":"";
- $(prefix+"VWAP").textContent=fmt(v.vwap);$(prefix+"RSI").textContent=fmt(v.rsi);
- $(prefix+"RSI").className=v.rsi>=70?"red":v.rsi<=30?"green":"";
- $(prefix+"Volume").textContent=vol(d.volume);$(prefix+"Session").textContent=d.vwapSession||"--";
- return v;
+if(!d||d.ema9==null||d.ema20==null||d.vwap==null||d.rsi14==null||spot==null)return null;
+let v={
+e9:num(d.ema9),e20:num(d.ema20),vwap:num(d.vwap),
+rsi:num(d.rsi14),spot:num(spot),volume:num(d.volume),
+candles:num(d.candleCount)
+};
+if(![v.e9,v.e20,v.vwap,v.rsi,v.spot].every(Number.isFinite))return null;
+
+$(prefix+"EMA").textContent=fmt(v.e9)+" / "+fmt(v.e20);
+$(prefix+"Trend").textContent=v.e9>v.e20?"BULLISH":v.e9<v.e20?"BEARISH":"NEUTRAL";
+$(prefix+"Trend").className=v.e9>v.e20?"green":v.e9<v.e20?"red":"";
+$(prefix+"VWAP").textContent=fmt(v.vwap);
+$(prefix+"RSI").textContent=fmt(v.rsi);
+$(prefix+"RSI").className=v.rsi>=70?"red":v.rsi<=30?"green":"";
+$(prefix+"Volume").textContent=vol(d.volume);
+$(prefix+"Session").textContent=d.vwapSession||"--";
+return v;
 }
-function expiryOf(c){return c&&Array.isArray(c.expiryData)&&c.expiryData.length?(c.expiryData[0].date||"--"):"--"}
+
+function expiryOf(c){
+return c&&Array.isArray(c.expiryData)&&c.expiryData.length?(c.expiryData[0].date||"--"):"--";
+}
+
 function chainView(c,spot,prefix,step){
- if(!c||!Array.isArray(c.optionsChain)){ $(""+prefix+"Chain").innerHTML='<tr><td colspan="9">Option Chain unavailable</td></tr>';$(prefix+"ChainStatus").textContent="Option Chain data unavailable";return null}
- let atm=Math.round(num(spot)/step)*step,arr=c.optionsChain;
- const get=(s,t)=>arr.find(x=>num(x.strike_price)===s&&x.option_type===t);
- let strikes=[atm-2*step,atm-step,atm,atm+step,atm+2*step];
- $(prefix+"ATM").textContent=vol(atm);$(prefix+"Expiry").textContent="Expiry: "+expiryOf(c);
- function cells(o,t){if(!o)return "<td>--</td><td>--</td><td>--</td><td>--</td>";let ch=num(o.oich);return '<td class="'+t+'">'+fmt(o.ltp)+'</td><td>'+vol(o.oi)+'</td><td class="'+(ch>0?"green":ch<0?"red":"")+'">'+(ch>0?"+":"")+vol(ch)+'</td><td>'+vol(o.volume)+'</td>'}
- $(prefix+"Chain").innerHTML=strikes.map(s=>'<tr class="'+(s===atm?"atm":"")+'">'+cells(get(s,"CE"),"ce")+'<td class="strike">'+vol(s)+'</td>'+cells(get(s,"PE"),"pe")+'</tr>').join("");
- let count=strikes.filter(s=>get(s,"CE")||get(s,"PE")).length;$(prefix+"ChainStatus").textContent="Showing "+count+" of 5 nearby strikes.";
- return {atm,strikes,get,expiry:expiryOf(c)};
+if(!c||!Array.isArray(c.optionsChain)){
+$(prefix+"Chain").innerHTML='<tr><td colspan="9">Option Chain unavailable</td></tr>';
+$(prefix+"ChainStatus").textContent="Option Chain data unavailable";
+return null;
 }
+let atm=Math.round(num(spot)/step)*step,arr=c.optionsChain;
+const get=(s,t)=>arr.find(x=>num(x.strike_price)===s&&x.option_type===t);
+let strikes=[atm-2*step,atm-step,atm,atm+step,atm+2*step];
+$(prefix+"ATM").textContent=vol(atm);
+$(prefix+"Expiry").textContent="Expiry: "+expiryOf(c);
+
+function cells(o,t){
+if(!o)return "<td>--</td><td>--</td><td>--</td><td>--</td>";
+let ch=num(o.oich);
+return '<td class="'+t+'">'+fmt(o.ltp)+'</td><td>'+vol(o.oi)+'</td><td class="'+(ch>0?"green":ch<0?"red":"")+'">'+(ch>0?"+":"")+vol(ch)+'</td><td>'+vol(o.volume)+'</td>';
+}
+
+$(prefix+"Chain").innerHTML=strikes.map(s=>'<tr class="'+(s===atm?"atm":"")+'">'+cells(get(s,"CE"),"ce")+'<td class="strike">'+vol(s)+'</td>'+cells(get(s,"PE"),"pe")+'</tr>').join("");
+let count=strikes.filter(s=>get(s,"CE")||get(s,"PE")).length;
+$(prefix+"ChainStatus").textContent="Showing "+count+" of 5 nearby strikes.";
+return {atm,strikes,get,expiry:expiryOf(c)};
+}
+
 function oiBias(cd){
- if(!cd)return "UNKNOWN";let ce=0,pe=0,cev=0,pev=0,nce=0,npe=0;
- cd.strikes.forEach(s=>{let a=cd.get(s,"CE"),b=cd.get(s,"PE");if(a){ce+=num(a.oich);cev+=num(a.volume);nce++}if(b){pe+=num(b.oich);pev+=num(b.volume);npe++}});
- if(!nce||!npe)return "UNKNOWN";
- if(pe>0&&ce<0)return "BULL";if(ce>0&&pe<0)return "BEAR";
- if(pe>ce&&pev>=cev)return "MILD_BULL";if(ce>pe&&cev>=pev)return "MILD_BEAR";return "MIXED";
+if(!cd)return "UNKNOWN";
+let ce=0,pe=0,cev=0,pev=0,nce=0,npe=0;
+cd.strikes.forEach(s=>{
+let a=cd.get(s,"CE"),b=cd.get(s,"PE");
+if(a){ce+=num(a.oich);cev+=num(a.volume);nce++}
+if(b){pe+=num(b.oich);pev+=num(b.volume);npe++}
+});
+if(!nce||!npe)return "UNKNOWN";
+if(pe>0&&ce<0)return "BULL";
+if(ce>0&&pe<0)return "BEAR";
+if(pe>ce&&pev>=cev)return "MILD_BULL";
+if(ce>pe&&cev>=pev)return "MILD_BEAR";
+return "MIXED";
 }
-function waitSignal(p,msg,score=0){$(p+"Signal").textContent="WAIT";$(p+"Signal").className="tag wait";$(p+"Contract").textContent="--";$(p+"Strength").textContent=score+" / 5";$(p+"Reason").textContent=msg;["Entry","SL","T1","T2"].forEach(k=>$(p+k).textContent="--")}
+
+function waitSignal(p,msg,score=0){
+$(p+"Signal").textContent="WAIT";
+$(p+"Signal").className="tag wait";
+$(p+"Contract").textContent="--";
+$(p+"Strength").textContent=score+" / 5";
+$(p+"Reason").textContent=msg;
+["Entry","SL","T1","T2"].forEach(k=>$(p+k).textContent="--");
+}
+
 function signal(p,ind,cd,fresh){
- if(!ind){waitSignal(p,"Indicator values unavailable");return}
- if(!fresh){waitSignal(p,"Data timestamp older than 10 minutes — no trade");return}
- if(ind.candles<30){waitSignal(p,"At least 30 five-minute candles required");return}
- if(!cd){waitSignal(p,"Option chain unavailable");return}
- let bull=ind.e9>ind.e20&&ind.spot>ind.vwap&&ind.rsi>=55&&ind.rsi<=68;
- let bear=ind.e9<ind.e20&&ind.spot<ind.vwap&&ind.rsi>=32&&ind.rsi<=45;
- let oi=oiBias(cd),dir=bull&&oi==="BULL"?"CE":bear&&oi==="BEAR"?"PE":null;
- let score=(bull||bear?2:0)+((bull&&ind.rsi>=55&&ind.rsi<=68)||(bear&&ind.rsi>=32&&ind.rsi<=45)?1:0)+(ind.volume>0?1:0)+(["BULL","BEAR"].includes(oi)?1:0);
- if(!dir){waitSignal(p,"No full EMA + VWAP + RSI + OI confirmation. OI: "+oi,score);return}
- let opt=cd.get(cd.atm,dir),entry=opt?Number(opt.ltp):NaN;
- if(!Number.isFinite(entry)||entry<=0){waitSignal(p,"ATM "+dir+" LTP missing; premium not estimated",score);return}
- $(p+"Signal").textContent="BUY "+dir;$(p+"Signal").className="tag "+(dir==="CE"?"signal-ce":"signal-pe");
- $(p+"Contract").textContent=vol(cd.atm)+" "+dir+" | Expiry "+cd.expiry;
- $(p+"Strength").textContent=score+" / 5";$(p+"Reason").textContent=(bull?"EMA bullish, spot above VWAP, RSI supportive":"EMA bearish, spot below VWAP, RSI supportive")+"; option-chain OI confirmation: "+oi;
- $(p+"Entry").textContent=fmt(entry);$(p+"SL").textContent=fmt(entry*(1-SL_PCT))+" (-20%)";$(p+"T1").textContent=fmt(entry*(1+T1_PCT))+" (+25%)";$(p+"T2").textContent=fmt(entry*(1+T2_PCT))+" (+50%)";
+if(!ind){waitSignal(p,"Indicator values unavailable");return}
+if(!fresh){waitSignal(p,"Data timestamp older than 10 minutes — no trade");return}
+if(ind.candles<30){waitSignal(p,"At least 30 five-minute candles required");return}
+if(!cd){waitSignal(p,"Option chain unavailable");return}
+
+let bull=ind.e9>ind.e20&&ind.spot>ind.vwap&&ind.rsi>=55&&ind.rsi<=68;
+let bear=ind.e9<ind.e20&&ind.spot<ind.vwap&&ind.rsi>=32&&ind.rsi<=45;
+let oi=oiBias(cd);
+let dir=bull&&oi==="BULL"?"CE":bear&&oi==="BEAR"?"PE":null;
+let score=(bull||bear?2:0)+((bull&&ind.rsi>=55&&ind.rsi<=68)||(bear&&ind.rsi>=32&&ind.rsi<=45)?1:0)+(ind.volume>0?1:0)+(["BULL","BEAR"].includes(oi)?1:0);
+
+if(!dir){waitSignal(p,"No full EMA + VWAP + RSI + OI confirmation. OI: "+oi,score);return}
+let opt=cd.get(cd.atm,dir),entry=opt?Number(opt.ltp):NaN;
+if(!Number.isFinite(entry)||entry<=0){waitSignal(p,"ATM "+dir+" LTP missing; premium not estimated",score);return}
+
+$(p+"Signal").textContent="BUY "+dir;
+$(p+"Signal").className="tag "+(dir==="CE"?"signal-ce":"signal-pe");
+$(p+"Contract").textContent=vol(cd.atm)+" "+dir+" | Expiry "+cd.expiry;
+$(p+"Strength").textContent=score+" / 5";
+$(p+"Reason").textContent=(bull?"EMA bullish, spot above VWAP, RSI supportive":"EMA bearish, spot below VWAP, RSI supportive")+"; option-chain OI confirmation: "+oi;
+$(p+"Entry").textContent=fmt(entry);
+$(p+"SL").textContent=fmt(entry*(1-SL_PCT))+" (-20%)";
+$(p+"T1").textContent=fmt(entry*(1+T1_PCT))+" (+25%)";
+$(p+"T2").textContent=fmt(entry*(1+T2_PCT))+" (+50%)";
 }
-function setError(msg){$("connection").textContent="ERROR";$("message").textContent=msg;waitSignal("nifty",msg);waitSignal("bank",msg)}
+
+function setError(msg){
+$("connection").textContent="ERROR";
+$("message").textContent=msg;
+waitSignal("nifty",msg);
+waitSignal("bank",msg);
+}
+
 function handleData(d){
- $("refreshBtn").disabled=false;
- if(!d||d.status!=="CONNECTED"){setError(d&&d.message?d.message:"FYERS data unavailable");return}
- $("connection").textContent="CONNECTED";
- if(d.nifty){$("niftyPrice").textContent=fmt(d.nifty.price);changeText("niftyChange",d.nifty.change,d.nifty.changePercent)}
- if(d.banknifty){$("bankPrice").textContent=fmt(d.banknifty.price);changeText("bankChange",d.banknifty.change,d.banknifty.changePercent)}
- let ni=readIndicators(d.niftyIndicators,d.nifty&&d.nifty.price,"nifty"),bi=readIndicators(d.bankniftyIndicators,d.banknifty&&d.banknifty.price,"bank");
- let nc=chainView(d.niftyOptionChain,d.nifty&&d.nifty.price,"nifty",50),bc=chainView(d.bankniftyOptionChain,d.banknifty&&d.banknifty.price,"bank",100);
- let ts=d.updated?new Date(d.updated).getTime():NaN,age=(Date.now()-ts)/60000,fresh=Number.isFinite(age)&&age>=-1&&age<=MAX_AGE_MIN;
- signal("nifty",ni,nc,fresh);signal("bank",bi,bc,fresh);
- $("updated").textContent=d.updated?new Date(d.updated).toLocaleString("en-IN"):"--";
- $("message").textContent="FYERS connected • data age: "+(Number.isFinite(age)?Math.max(0,age).toFixed(1)+" min":"unknown")+" • candles NIFTY "+(d.niftyIndicators?.candleCount??"--")+", BANKNIFTY "+(d.bankniftyIndicators?.candleCount??"--")+(fresh?"":" • stale data: signals WAIT");
+$("refreshBtn").disabled=false;
+if(!d||d.status!=="CONNECTED"){
+setError(d&&d.message?d.message:"FYERS data unavailable");
+return;
 }
+
+$("connection").textContent="CONNECTED";
+if(d.nifty){
+$("niftyPrice").textContent=fmt(d.nifty.price);
+changeText("niftyChange",d.nifty.change,d.nifty.changePercent);
+}
+if(d.banknifty){
+$("bankPrice").textContent=fmt(d.banknifty.price);
+changeText("bankChange",d.banknifty.change,d.banknifty.changePercent);
+}
+
+let ni=readIndicators(d.niftyIndicators,d.nifty&&d.nifty.price,"nifty");
+let bi=readIndicators(d.bankniftyIndicators,d.banknifty&&d.banknifty.price,"bank");
+let nc=chainView(d.niftyOptionChain,d.nifty&&d.nifty.price,"nifty",50);
+let bc=chainView(d.bankniftyOptionChain,d.banknifty&&d.banknifty.price,"bank",100);
+
+let ts=d.updated?new Date(d.updated).getTime():NaN;
+let age=(Date.now()-ts)/60000;
+let fresh=Number.isFinite(age)&&age>=-1&&age<=MAX_AGE_MIN;
+
+signal("nifty",ni,nc,fresh);
+signal("bank",bi,bc,fresh);
+
+$("updated").textContent=d.updated?new Date(d.updated).toLocaleString("en-IN"):"--";
+$("message").textContent="FYERS connected • data age: "+(Number.isFinite(age)?Math.max(0,age).toFixed(1)+" min":"unknown")+" • candles NIFTY "+(d.niftyIndicators?.candleCount??"--")+", BANKNIFTY "+(d.bankniftyIndicators?.candleCount??"--")+(fresh?"":" • stale data: signals WAIT");
+}
+
 function loadMarketData(){
- $("refreshBtn").disabled=true;$("connection").textContent="Connecting...";$("message").textContent="Fetching FYERS data...";
- let old=$("fyersJsonp");if(old)old.remove();let cb="fyersCallback_"+Date.now();
- window[cb]=d=>{try{handleData(d)}finally{delete window[cb];let s=$("fyersJsonp");if(s)s.remove()}};
- let s=document.createElement("script");s.id="fyersJsonp";s.onerror=()=>{ $("refreshBtn").disabled=false;delete window[cb];setError("Connection failed. Check Apps Script deployment and FYERS token.")};
- s.src=API_URL+"?callback="+cb+"&_="+Date.now();document.body.appendChild(s);
+$("refreshBtn").disabled=true;
+$("connection").textContent="Connecting...";
+$("message").textContent="Fetching FYERS data...";
+let old=$("fyersJsonp");
+if(old)old.remove();
+
+let cb="fyersCallback_"+Date.now();
+window[cb]=d=>{
+try{handleData(d)}
+finally{
+delete window[cb];
+let s=$("fyersJsonp");
+if(s)s.remove();
 }
+};
+
+let s=document.createElement("script");
+s.id="fyersJsonp";
+s.onerror=()=>{
+$("refreshBtn").disabled=false;
+delete window[cb];
+setError("Connection failed. Check Apps Script deployment and FYERS token.");
+};
+s.src=API_URL+"?callback="+cb+"&_="+Date.now();
+document.body.appendChild(s);
+}
+
+// ---------------- HISTORICAL BACKTEST UI ----------------
+
+function localISODate(d){
+const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,"0"),day=String(d.getDate()).padStart(2,"0");
+return y+"-"+m+"-"+day;
+}
+
+function setBacktestPeriod(days){
+const end=new Date();
+end.setDate(end.getDate()-1);
+const start=new Date(end);
+start.setDate(start.getDate()-(days-1));
+$("btFrom").value=localISODate(start);
+$("btTo").value=localISODate(end);
+document.querySelectorAll("[data-period]").forEach(b=>b.classList.toggle("active",Number(b.dataset.period)===days));
+}
+
+document.querySelectorAll("[data-period]").forEach(b=>b.addEventListener("click",()=>setBacktestPeriod(Number(b.dataset.period))));
+
+setBacktestPeriod(1);
+
+function btNum(v){
+return v===null||v===undefined?"--":Number(v).toLocaleString("en-IN",{maximumFractionDigits:2});
+}
+
+function renderBacktestSymbol(x){
+if(!x)return "<p class=\"bt-status\">No result returned.</p>";
+const acc=x.directionalAccuracy==null?"--":x.directionalAccuracy.toFixed(2)+"%";
+
+let rows=(x.trades||[]).map(t=>
+'<tr><td>'+t.number+'</td><td>'+t.date+'</td><td class="'+(t.signal==="BUY CE"?"ce":"pe")+'">'+t.signal+'</td><td>'+btNum(t.entrySpot)+'</td><td>'+btNum(t.exitSpot)+'</td><td>'+btNum(t.spotChange)+'</td><td>'+btNum(t.ema9)+'</td><td>'+btNum(t.ema20)+'</td><td>'+btNum(t.vwap)+'</td><td>'+btNum(t.rsi14)+'</td><td class="'+(t.outcome==="WIN"?"bt-win":t.outcome==="LOSS"?"bt-loss":"")+'">'+t.outcome+'</td></tr>'
+).join("");
+
+return '<div class="bt-result"><h4>'+x.symbol+'</h4><div class="bt-summary">'+
+'<div class="bt-box"><span>Total Signals</span><b>'+btNum(x.totalSignals)+'</b></div>'+
+'<div class="bt-box"><span>Directional Accuracy</span><b>'+acc+'</b></div>'+
+'<div class="bt-box"><span>Wins / Losses</span><b><span class="bt-win">'+btNum(x.wins)+'</span> / <span class="bt-loss">'+btNum(x.losses)+'</span></b></div>'+
+'<div class="bt-box"><span>Flats / Candles</span><b>'+btNum(x.flats)+' / '+btNum(x.evaluatedCandles)+'</b></div>'+
+'</div><p class="bt-status">Warm-up candles: '+btNum(x.warmupCandles)+' · Evaluated candles: '+btNum(x.evaluatedCandles)+' · '+(x.message||"")+'</p>'+
+'<div class="table-wrap"><table class="bt-table"><thead><tr><th>#</th><th>Entry Time</th><th>Signal</th><th>Entry Spot</th><th>Exit Spot</th><th>Spot Change</th><th>EMA 9</th><th>EMA 20</th><th>VWAP</th><th>RSI</th><th>Result</th></tr></thead><tbody>'+
+(rows||'<tr><td colspan="11">No qualifying trades in this date range.</td></tr>')+
+'</tbody></table></div></div>';
+}
+
+function runBacktest(){
+const from=$("btFrom").value,to=$("btTo").value;
+
+if(!from||!to){
+$("btStatus").textContent="Please select both dates.";
+return;
+}
+if(from>to){
+$("btStatus").textContent="From Date must be before To Date.";
+return;
+}
+
+const days=Math.round((new Date(to+"T00:00:00")-new Date(from+"T00:00:00"))/86400000)+1;
+if(days>31){
+$("btStatus").textContent="Maximum 31 calendar days per request. Choose a shorter range.";
+return;
+}
+
+if(new Date(to+"T00:00:00")>=new Date(localISODate(new Date())+"T00:00:00")){
+$("btStatus").textContent="To Date must be before today because only completed historical dates are supported.";
+return;
+}
+
+const btn=$("runBacktestBtn");
+btn.disabled=true;
+btn.textContent="LOADING...";
+$("btStatus").textContent="Fetching historical 5-minute candles from FYERS...";
+$("btResults").innerHTML="";
+
+const old=$("btJsonp");
+if(old)old.remove();
+
+const cb="backtestCallback_"+Date.now();
+
+window[cb]=d=>{
+try{
+if(!d||d.status!=="SUCCESS"){
+$("btStatus").textContent="Backtest error: "+(d&&d.message?d.message:"Unknown API error");
+return;
+}
+$("btStatus").textContent="Backtest completed: "+d.from+" to "+d.to+" · "+d.timeframe+" · Spot direction only.";
+$("btResults").innerHTML=renderBacktestSymbol(d.nifty)+renderBacktestSymbol(d.banknifty);
+}
+finally{
+btn.disabled=false;
+btn.textContent="▶ RUN BACKTEST";
+delete window[cb];
+const el=$("btJsonp");
+if(el)el.remove();
+}
+};
+
+const script=document.createElement("script");
+script.id="btJsonp";
+script.onerror=()=>{
+$("btStatus").textContent="Backtest API connection failed. Check deployment and try again.";
+btn.disabled=false;
+btn.textContent="▶ RUN BACKTEST";
+delete window[cb];
+script.remove();
+};
+
+script.src=API_URL+"?mode=backtest&from="+encodeURIComponent(from)+"&to="+encodeURIComponent(to)+"&callback="+cb+"&_="+Date.now();
+document.body.appendChild(script);
+}
+
+// -----------------------------------------------------
+
 loadMarketData();
-</script></body></html>
+</script>
+</body>
+</html>
