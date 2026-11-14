@@ -2,390 +2,144 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>INDIA OPTIONS PRO</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#080e18;color:white;font-family:Arial;padding:12px}
-h2{color:#00e676;text-align:center}
-h3{margin-top:0}
-.sub{text-align:center;color:#9aa7b8;font-size:13px}
+*{box-sizing:border-box}body{margin:0;background:#080e18;color:#fff;font-family:Arial;padding:12px;max-width:1100px;margin:auto}
+h2{color:#00e676;text-align:center}h3{margin:0 0 12px}.sub{text-align:center;color:#9aa7b8;font-size:13px}
 .card{background:#131e2e;border:1px solid #293950;border-radius:14px;padding:14px;margin:13px 0}
-.price{font-size:26px;font-weight:bold}
-.row{display:flex;justify-content:space-between;gap:10px;margin:12px 0;align-items:center}
-.tag{padding:7px 12px;border-radius:8px;font-weight:bold}
-.wait{background:#554500;color:#ffe45c}
-.signal-ce{background:#064d2b;color:#00e676}
-.signal-pe{background:#591b26;color:#ff5252}
-.green{color:#00e676}
-.red{color:#ff5252}
-button,select{padding:12px;border:0;border-radius:9px;font-weight:bold}
-button{width:100%;background:#00c853;color:#001b0a;font-size:15px}
-button:disabled{opacity:.5}
-select{background:#202e42;color:white;border:1px solid #40536d}
-.small{font-size:12px;color:#9aa7b8;line-height:1.5}
-.note{font-size:12px;color:#ffd65a;line-height:1.5}
-.table-wrap{overflow-x:auto;width:100%}
-table{width:100%;border-collapse:collapse;min-width:650px;font-size:12px}
-th,td{padding:9px 6px;text-align:center;border-bottom:1px solid #293950;white-space:nowrap}
-th{background:#202e42;color:#d8e5f5}
-.atm{background:#273b30}
-.strike{font-weight:bold;color:#ffd65a}
-.ce{color:#00e676}
-.pe{color:#ff7373}
-.section-title{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
-.expiry{color:#ffd65a;font-size:12px}
+.row{display:flex;justify-content:space-between;gap:10px;margin:12px 0;align-items:center;flex-wrap:wrap}.price{font-size:26px}
+.tag{padding:7px 12px;border-radius:8px;font-weight:bold}.wait{background:#554500;color:#ffe45c}.signal-ce{background:#064d2b;color:#00e676}.signal-pe{background:#591b26;color:#ff5252}
+.green{color:#00e676}.red{color:#ff5252}.small{font-size:12px;color:#9aa7b8;line-height:1.5}.note{font-size:12px;color:#ffd65a;line-height:1.5}
+button{padding:12px;border:0;border-radius:9px;font-weight:bold;width:100%;background:#00c853;color:#001b0a;font-size:15px}button:disabled{opacity:.5}
+.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:650px;font-size:12px}th,td{padding:9px 6px;text-align:center;border-bottom:1px solid #293950;white-space:nowrap}th{background:#202e42;color:#d8e5f5}
+.atm{background:#273b30}.strike{font-weight:bold;color:#ffd65a}.ce{color:#00e676}.pe{color:#ff7373}
+.section-title,.signal-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}.expiry{color:#ffd65a;font-size:12px}
+.trade-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}.trade-cell{background:#202e42;padding:10px;border-radius:9px}.trade-cell span{display:block;color:#9aa7b8;font-size:11px;margin-bottom:5px}.trade-cell b{font-size:16px}
+@media(min-width:800px){.trade-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 </style>
 </head>
-
 <body>
+<h2>⚡ INDIA OPTIONS PRO</h2><div class="sub">NIFTY • BANKNIFTY | 5 MIN CHART | RULE-BASED SIGNALS</div>
 
-<h2>⚡ INDIA OPTIONS PRO</h2>
-<div class="sub">NIFTY • BANKNIFTY | 5 MIN CHART</div>
-
-<div class="card">
-<h3>📊 NIFTY 50</h3>
+<div class="card"><h3>📊 NIFTY 50</h3>
 <div class="row"><span>Spot Price</span><b class="price" id="niftyPrice">--</b></div>
-<div class="row"><span>Change</span><b id="niftyChange">--</b></div>
-<div class="row"><span>EMA 9 / EMA 20</span><b id="niftyEMA">-- / --</b></div>
-<div class="row"><span>EMA Trend</span><b id="niftyTrend">--</b></div>
-<div class="row"><span>VWAP</span><b id="niftyVWAP">--</b></div>
-<div class="row"><span>RSI 14</span><b id="niftyRSI">--</b></div>
-<div class="row"><span>Volume</span><b id="niftyVolume">--</b></div>
-<div class="row"><span>VWAP Session</span><b id="niftySession">--</b></div>
-<div class="row"><span>Trading Signal</span><span class="tag wait" id="niftySignal">WAIT</span></div>
-</div>
+<div class="row"><span>Change</span><b id="niftyChange">--</b></div><div class="row"><span>EMA 9 / EMA 20</span><b id="niftyEMA">-- / --</b></div>
+<div class="row"><span>EMA Trend</span><b id="niftyTrend">--</b></div><div class="row"><span>VWAP</span><b id="niftyVWAP">--</b></div>
+<div class="row"><span>RSI 14</span><b id="niftyRSI">--</b></div><div class="row"><span>Volume</span><b id="niftyVolume">--</b></div>
+<div class="row"><span>VWAP Session</span><b id="niftySession">--</b></div></div>
 
-<div class="card">
-<h3>🏦 BANK NIFTY</h3>
+<div class="card"><h3>🏦 BANK NIFTY</h3>
 <div class="row"><span>Spot Price</span><b class="price" id="bankPrice">--</b></div>
-<div class="row"><span>Change</span><b id="bankChange">--</b></div>
-<div class="row"><span>EMA 9 / EMA 20</span><b id="bankEMA">-- / --</b></div>
-<div class="row"><span>EMA Trend</span><b id="bankTrend">--</b></div>
-<div class="row"><span>VWAP</span><b id="bankVWAP">--</b></div>
-<div class="row"><span>RSI 14</span><b id="bankRSI">--</b></div>
-<div class="row"><span>Volume</span><b id="bankVolume">--</b></div>
-<div class="row"><span>VWAP Session</span><b id="bankSession">--</b></div>
-<div class="row"><span>Trading Signal</span><span class="tag wait" id="bankSignal">WAIT</span></div>
-</div>
+<div class="row"><span>Change</span><b id="bankChange">--</b></div><div class="row"><span>EMA 9 / EMA 20</span><b id="bankEMA">-- / --</b></div>
+<div class="row"><span>EMA Trend</span><b id="bankTrend">--</b></div><div class="row"><span>VWAP</span><b id="bankVWAP">--</b></div>
+<div class="row"><span>RSI 14</span><b id="bankRSI">--</b></div><div class="row"><span>Volume</span><b id="bankVolume">--</b></div>
+<div class="row"><span>VWAP Session</span><b id="bankSession">--</b></div></div>
 
-<!-- NIFTY OPTION CHAIN -->
-<div class="card">
-<div class="section-title">
-<h3>📈 NIFTY OPTION CHAIN</h3>
-<span class="expiry" id="niftyExpiry">Expiry: --</span>
-</div>
-<div class="row">
-<span>ATM Strike</span><b id="niftyATM">--</b>
-</div>
-<div class="table-wrap">
-<table>
-<thead>
-<tr>
-<th colspan="4" class="ce">CALL (CE)</th>
-<th class="strike">STRIKE</th>
-<th colspan="4" class="pe">PUT (PE)</th>
-</tr>
-<tr>
-<th>LTP</th><th>OI</th><th>OI CHG</th><th>VOL</th>
-<th>PRICE</th>
-<th>LTP</th><th>OI</th><th>OI CHG</th><th>VOL</th>
-</tr>
-</thead>
-<tbody id="niftyChain">
-<tr><td colspan="9">Loading Option Chain...</td></tr>
-</tbody>
-</table>
-</div>
-<p class="small" id="niftyChainStatus">Waiting for data...</p>
-</div>
+<div class="card"><div class="signal-head"><h3>🎯 NIFTY OPTION SIGNAL</h3><span class="tag wait" id="niftySignal">WAIT</span></div>
+<div class="row"><span>Recommended Contract</span><b id="niftyContract">--</b></div><div class="row"><span>Signal Strength</span><b id="niftyStrength">0 / 5</b></div>
+<div class="row"><span>Confirmation</span><b id="niftyReason" class="small">Waiting for data</b></div>
+<div class="trade-grid"><div class="trade-cell"><span>Entry Premium</span><b id="niftyEntry">--</b></div><div class="trade-cell"><span>Stop Loss</span><b class="red" id="niftySL">--</b></div><div class="trade-cell"><span>Target 1</span><b class="green" id="niftyT1">--</b></div><div class="trade-cell"><span>Target 2</span><b class="green" id="niftyT2">--</b></div></div>
+<p class="small">Rule-based estimate only. Confirm live premium and contract on Angel One before any manual trade.</p></div>
 
-<!-- BANKNIFTY OPTION CHAIN -->
-<div class="card">
-<div class="section-title">
-<h3>🏦 BANKNIFTY OPTION CHAIN</h3>
-<span class="expiry" id="bankExpiry">Expiry: --</span>
-</div>
-<div class="row">
-<span>ATM Strike</span><b id="bankATM">--</b>
-</div>
-<div class="table-wrap">
-<table>
-<thead>
-<tr>
-<th colspan="4" class="ce">CALL (CE)</th>
-<th class="strike">STRIKE</th>
-<th colspan="4" class="pe">PUT (PE)</th>
-</tr>
-<tr>
-<th>LTP</th><th>OI</th><th>OI CHG</th><th>VOL</th>
-<th>PRICE</th>
-<th>LTP</th><th>OI</th><th>OI CHG</th><th>VOL</th>
-</tr>
-</thead>
-<tbody id="bankChain">
-<tr><td colspan="9">Loading Option Chain...</td></tr>
-</tbody>
-</table>
-</div>
-<p class="small" id="bankChainStatus">Waiting for data...</p>
-</div>
+<div class="card"><div class="signal-head"><h3>🎯 BANKNIFTY OPTION SIGNAL</h3><span class="tag wait" id="bankSignal">WAIT</span></div>
+<div class="row"><span>Recommended Contract</span><b id="bankContract">--</b></div><div class="row"><span>Signal Strength</span><b id="bankStrength">0 / 5</b></div>
+<div class="row"><span>Confirmation</span><b id="bankReason" class="small">Waiting for data</b></div>
+<div class="trade-grid"><div class="trade-cell"><span>Entry Premium</span><b id="bankEntry">--</b></div><div class="trade-cell"><span>Stop Loss</span><b class="red" id="bankSL">--</b></div><div class="trade-cell"><span>Target 1</span><b class="green" id="bankT1">--</b></div><div class="trade-cell"><span>Target 2</span><b class="green" id="bankT2">--</b></div></div>
+<p class="small">Rule-based estimate only. Confirm live premium and contract on Angel One before any manual trade.</p></div>
 
-<div class="card">
-<h3>🎯 OPTION TRADE</h3>
-<div class="row"><span>Option</span><b id="tradeOption">--</b></div>
-<div class="row"><span>ATM Strike</span><b id="tradeStrike">--</b></div>
-<div class="row"><span>Entry</span><b id="tradeEntry">--</b></div>
-<div class="row"><span>Stop Loss</span><b class="red" id="tradeSL">--</b></div>
-<div class="row"><span>Target 1</span><b class="green" id="tradeT1">--</b></div>
-<div class="row"><span>Target 2</span><b class="green" id="tradeT2">--</b></div>
-<p class="small">Option entry, SL and targets are not generated yet. No automatic order placement.</p>
-</div>
+<div class="card"><div class="section-title"><h3>📈 NIFTY OPTION CHAIN</h3><span class="expiry" id="niftyExpiry">Expiry: --</span></div>
+<div class="row"><span>ATM Strike</span><b id="niftyATM">--</b></div><div class="table-wrap"><table>
+<thead><tr><th colspan="4" class="ce">CALL (CE)</th><th class="strike">STRIKE</th><th colspan="4" class="pe">PUT (PE)</th></tr><tr><th>LTP</th><th>OI</th><th>OI CHG</th><th>VOL</th><th>PRICE</th><th>LTP</th><th>OI</th><th>OI CHG</th><th>VOL</th></tr></thead>
+<tbody id="niftyChain"><tr><td colspan="9">Loading...</td></tr></tbody></table></div><p class="small" id="niftyChainStatus">Waiting for data...</p></div>
 
-<div class="card">
-<h3>📡 LIVE STATUS</h3>
-<div class="row"><span>Data Connection</span><b id="connection">Checking...</b></div>
-<div class="row"><span>Last Updated</span><b id="updated">--</b></div>
-<button onclick="loadMarketData()" id="refreshBtn">↻ REFRESH DATA</button>
-<p class="small" id="message">Connecting to FYERS...</p>
-<p class="note">
-Market बंद असताना शेवटचे उपलब्ध भाव दिसू शकतात.
-BUY / SELL संकेत हे नियमांवर आधारित आहेत; हमखास नफा किंवा अचूकतेची हमी नाही.
-Live trade करण्यापूर्वी डेटा आणि नियम तपासा.
-</p>
-</div>
+<div class="card"><div class="section-title"><h3>🏦 BANKNIFTY OPTION CHAIN</h3><span class="expiry" id="bankExpiry">Expiry: --</span></div>
+<div class="row"><span>ATM Strike</span><b id="bankATM">--</b></div><div class="table-wrap"><table>
+<thead><tr><th colspan="4" class="ce">CALL (CE)</th><th class="strike">STRIKE</th><th colspan="4" class="pe">PUT (PE)</th></tr><tr><th>LTP</th><th>OI</th><th>OI CHG</th><th>VOL</th><th>PRICE</th><th>LTP</th><th>OI</th><th>OI CHG</th><th>VOL</th></tr></thead>
+<tbody id="bankChain"><tr><td colspan="9">Loading...</td></tr></tbody></table></div><p class="small" id="bankChainStatus">Waiting for data...</p></div>
+
+<div class="card"><h3>📡 LIVE STATUS</h3><div class="row"><span>Data Connection</span><b id="connection">Checking...</b></div>
+<div class="row"><span>Last Updated</span><b id="updated">--</b></div><button onclick="loadMarketData()" id="refreshBtn">↻ REFRESH DATA</button>
+<p class="small" id="message">Connecting to FYERS...</p><p class="note">Market बंद असताना शेवटचे उपलब्ध भाव दिसू शकतात. API timestamp 10 मिनिटांपेक्षा जुना असल्यास Signal WAIT राहील. SL/Targets हे premium चे टक्केवारीवर आधारित illustrative levels आहेत; slippage, charges आणि volatility यात समाविष्ट नाहीत. Live order आधी Angel One वर expiry, strike आणि premium तपासा. हा dashboard order place करत नाही.</p></div>
 
 <script>
-const API_URL =
-"https://script.google.com/macros/s/AKfycbz_e3MeV0iZrtifCJLsDWV9l7FOT3aRDxn6TwduPipWsEP7ZPtcOyup9bIZY6fDddgl/exec";
+const API_URL="https://script.google.com/macros/s/AKfycbz_e3MeV0iZrtifCJLsDWV9l7FOT3aRDxn6TwduPipWsEP7ZPtcOyup9bIZY6fDddgl/exec";
+const MAX_AGE_MIN=10,SL_PCT=.20,T1_PCT=.25,T2_PCT=.50;
+const $=id=>document.getElementById(id);
+function fmt(v){if(v===null||v===undefined||!Number.isFinite(Number(v)))return "--";return Number(v).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2});}
+function num(v){return Number.isFinite(Number(v))?Number(v):0}
+function vol(v){return v===null||v===undefined||!Number.isFinite(Number(v))?"--":Number(v).toLocaleString("en-IN")}
+function changeText(id,c,p){let x=$(id);if(c==null){x.textContent="--";return}let up=num(c)>=0;x.textContent=(up?"+":"")+fmt(c)+" ("+(up?"+":"")+num(p).toFixed(2)+"%)";x.className=up?"green":"red"}
 
-function fmt(v){
- if(v===null || v===undefined || !Number.isFinite(Number(v))) return "--";
- return Number(v).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2});
+function readIndicators(d,spot,prefix){
+ if(!d||d.ema9==null||d.ema20==null||d.vwap==null||d.rsi14==null||spot==null)return null;
+ let v={e9:num(d.ema9),e20:num(d.ema20),vwap:num(d.vwap),rsi:num(d.rsi14),spot:num(spot),volume:num(d.volume),candles:num(d.candleCount)};
+ if(![v.e9,v.e20,v.vwap,v.rsi,v.spot].every(Number.isFinite))return null;
+ $(prefix+"EMA").textContent=fmt(v.e9)+" / "+fmt(v.e20);
+ $(prefix+"Trend").textContent=v.e9>v.e20?"BULLISH":v.e9<v.e20?"BEARISH":"NEUTRAL";
+ $(prefix+"Trend").className=v.e9>v.e20?"green":v.e9<v.e20?"red":"";
+ $(prefix+"VWAP").textContent=fmt(v.vwap);$(prefix+"RSI").textContent=fmt(v.rsi);
+ $(prefix+"RSI").className=v.rsi>=70?"red":v.rsi<=30?"green":"";
+ $(prefix+"Volume").textContent=vol(d.volume);$(prefix+"Session").textContent=d.vwapSession||"--";
+ return v;
 }
-
-function fmtVolume(v){
- if(v===null || v===undefined || !Number.isFinite(Number(v))) return "--";
- return Number(v).toLocaleString("en-IN");
+function expiryOf(c){return c&&Array.isArray(c.expiryData)&&c.expiryData.length?(c.expiryData[0].date||"--"):"--"}
+function chainView(c,spot,prefix,step){
+ if(!c||!Array.isArray(c.optionsChain)){ $(""+prefix+"Chain").innerHTML='<tr><td colspan="9">Option Chain unavailable</td></tr>';$(prefix+"ChainStatus").textContent="Option Chain data unavailable";return null}
+ let atm=Math.round(num(spot)/step)*step,arr=c.optionsChain;
+ const get=(s,t)=>arr.find(x=>num(x.strike_price)===s&&x.option_type===t);
+ let strikes=[atm-2*step,atm-step,atm,atm+step,atm+2*step];
+ $(prefix+"ATM").textContent=vol(atm);$(prefix+"Expiry").textContent="Expiry: "+expiryOf(c);
+ function cells(o,t){if(!o)return "<td>--</td><td>--</td><td>--</td><td>--</td>";let ch=num(o.oich);return '<td class="'+t+'">'+fmt(o.ltp)+'</td><td>'+vol(o.oi)+'</td><td class="'+(ch>0?"green":ch<0?"red":"")+'">'+(ch>0?"+":"")+vol(ch)+'</td><td>'+vol(o.volume)+'</td>'}
+ $(prefix+"Chain").innerHTML=strikes.map(s=>'<tr class="'+(s===atm?"atm":"")+'">'+cells(get(s,"CE"),"ce")+'<td class="strike">'+vol(s)+'</td>'+cells(get(s,"PE"),"pe")+'</tr>').join("");
+ let count=strikes.filter(s=>get(s,"CE")||get(s,"PE")).length;$(prefix+"ChainStatus").textContent="Showing "+count+" of 5 nearby strikes.";
+ return {atm,strikes,get,expiry:expiryOf(c)};
 }
-
-function changeText(id,c,p){
- const el=document.getElementById(id);
- if(c===null || c===undefined){el.textContent="--";return;}
- const positive=Number(c)>=0;
- el.textContent=(positive?"+":"")+fmt(c)+" ("+
- (positive?"+":"")+Number(p||0).toFixed(2)+"%)";
- el.className=positive?"green":"red";
+function oiBias(cd){
+ if(!cd)return "UNKNOWN";let ce=0,pe=0,cev=0,pev=0,nce=0,npe=0;
+ cd.strikes.forEach(s=>{let a=cd.get(s,"CE"),b=cd.get(s,"PE");if(a){ce+=num(a.oich);cev+=num(a.volume);nce++}if(b){pe+=num(b.oich);pev+=num(b.volume);npe++}});
+ if(!nce||!npe)return "UNKNOWN";
+ if(pe>0&&ce<0)return "BULL";if(ce>0&&pe<0)return "BEAR";
+ if(pe>ce&&pev>=cev)return "MILD_BULL";if(ce>pe&&cev>=pev)return "MILD_BEAR";return "MIXED";
 }
-
-function showIndicators(data,price,prefix,emaId,trendId,signalId){
- const ema=document.getElementById(emaId);
- const trend=document.getElementById(trendId);
- const signal=document.getElementById(signalId);
-
- function setSignal(label,cls){
-  signal.textContent=label;
-  signal.className="tag "+cls;
- }
-
- if(!data || data.ema9==null || data.ema20==null ||
-    data.vwap==null || data.rsi14==null || price==null){
-  ema.textContent="-- / --";
-  trend.textContent="Unavailable";
-  setSignal("WAIT","wait");
-  return;
- }
-
- const e9=Number(data.ema9);
- const e20=Number(data.ema20);
- const vwap=Number(data.vwap);
- const rsi=Number(data.rsi14);
- const spot=Number(price);
-
- if(![e9,e20,vwap,rsi,spot].every(Number.isFinite)){
-  setSignal("WAIT","wait");
-  return;
- }
-
- ema.textContent=fmt(e9)+" / "+fmt(e20);
-
- if(e9>e20){
-  trend.textContent="BULLISH";
-  trend.className="green";
- }else if(e9<e20){
-  trend.textContent="BEARISH";
-  trend.className="red";
- }else{
-  trend.textContent="NEUTRAL";
-  trend.className="";
- }
-
- document.getElementById(prefix+"VWAP").textContent=fmt(vwap);
- document.getElementById(prefix+"RSI").textContent=fmt(rsi);
- document.getElementById(prefix+"Volume").textContent=fmtVolume(data.volume);
- document.getElementById(prefix+"Session").textContent=data.vwapSession||"--";
-
- const rsiEl=document.getElementById(prefix+"RSI");
- rsiEl.className=rsi>=70?"red":rsi<=30?"green":"";
-
- if(e9>e20 && spot>vwap && rsi>=55 && rsi<=70){
-  setSignal("BUY","signal-ce");
- }else if(e9<e20 && spot<vwap && rsi>=30 && rsi<=45){
-  setSignal("SELL","signal-pe");
- }else{
-  setSignal("WAIT","wait");
- }
+function waitSignal(p,msg,score=0){$(p+"Signal").textContent="WAIT";$(p+"Signal").className="tag wait";$(p+"Contract").textContent="--";$(p+"Strength").textContent=score+" / 5";$(p+"Reason").textContent=msg;["Entry","SL","T1","T2"].forEach(k=>$(p+k).textContent="--")}
+function signal(p,ind,cd,fresh){
+ if(!ind){waitSignal(p,"Indicator values unavailable");return}
+ if(!fresh){waitSignal(p,"Data timestamp older than 10 minutes — no trade");return}
+ if(ind.candles<30){waitSignal(p,"At least 30 five-minute candles required");return}
+ if(!cd){waitSignal(p,"Option chain unavailable");return}
+ let bull=ind.e9>ind.e20&&ind.spot>ind.vwap&&ind.rsi>=55&&ind.rsi<=68;
+ let bear=ind.e9<ind.e20&&ind.spot<ind.vwap&&ind.rsi>=32&&ind.rsi<=45;
+ let oi=oiBias(cd),dir=bull&&oi==="BULL"?"CE":bear&&oi==="BEAR"?"PE":null;
+ let score=(bull||bear?2:0)+((bull&&ind.rsi>=55&&ind.rsi<=68)||(bear&&ind.rsi>=32&&ind.rsi<=45)?1:0)+(ind.volume>0?1:0)+(["BULL","BEAR"].includes(oi)?1:0);
+ if(!dir){waitSignal(p,"No full EMA + VWAP + RSI + OI confirmation. OI: "+oi,score);return}
+ let opt=cd.get(cd.atm,dir),entry=opt?Number(opt.ltp):NaN;
+ if(!Number.isFinite(entry)||entry<=0){waitSignal(p,"ATM "+dir+" LTP missing; premium not estimated",score);return}
+ $(p+"Signal").textContent="BUY "+dir;$(p+"Signal").className="tag "+(dir==="CE"?"signal-ce":"signal-pe");
+ $(p+"Contract").textContent=vol(cd.atm)+" "+dir+" | Expiry "+cd.expiry;
+ $(p+"Strength").textContent=score+" / 5";$(p+"Reason").textContent=(bull?"EMA bullish, spot above VWAP, RSI supportive":"EMA bearish, spot below VWAP, RSI supportive")+"; option-chain OI confirmation: "+oi;
+ $(p+"Entry").textContent=fmt(entry);$(p+"SL").textContent=fmt(entry*(1-SL_PCT))+" (-20%)";$(p+"T1").textContent=fmt(entry*(1+T1_PCT))+" (+25%)";$(p+"T2").textContent=fmt(entry*(1+T2_PCT))+" (+50%)";
 }
-
-function findExpiry(chain){
- if(!chain || !Array.isArray(chain.expiryData) || !chain.expiryData.length) return "--";
- return chain.expiryData[0].date || "--";
+function setError(msg){$("connection").textContent="ERROR";$("message").textContent=msg;waitSignal("nifty",msg);waitSignal("bank",msg)}
+function handleData(d){
+ $("refreshBtn").disabled=false;
+ if(!d||d.status!=="CONNECTED"){setError(d&&d.message?d.message:"FYERS data unavailable");return}
+ $("connection").textContent="CONNECTED";
+ if(d.nifty){$("niftyPrice").textContent=fmt(d.nifty.price);changeText("niftyChange",d.nifty.change,d.nifty.changePercent)}
+ if(d.banknifty){$("bankPrice").textContent=fmt(d.banknifty.price);changeText("bankChange",d.banknifty.change,d.banknifty.changePercent)}
+ let ni=readIndicators(d.niftyIndicators,d.nifty&&d.nifty.price,"nifty"),bi=readIndicators(d.bankniftyIndicators,d.banknifty&&d.banknifty.price,"bank");
+ let nc=chainView(d.niftyOptionChain,d.nifty&&d.nifty.price,"nifty",50),bc=chainView(d.bankniftyOptionChain,d.banknifty&&d.banknifty.price,"bank",100);
+ let ts=d.updated?new Date(d.updated).getTime():NaN,age=(Date.now()-ts)/60000,fresh=Number.isFinite(age)&&age>=-1&&age<=MAX_AGE_MIN;
+ signal("nifty",ni,nc,fresh);signal("bank",bi,bc,fresh);
+ $("updated").textContent=d.updated?new Date(d.updated).toLocaleString("en-IN"):"--";
+ $("message").textContent="FYERS connected • data age: "+(Number.isFinite(age)?Math.max(0,age).toFixed(1)+" min":"unknown")+" • candles NIFTY "+(d.niftyIndicators?.candleCount??"--")+", BANKNIFTY "+(d.bankniftyIndicators?.candleCount??"--")+(fresh?"":" • stale data: signals WAIT");
 }
-
-function renderOptionChain(chain,spot,bodyId,atmId,expiryId,statusId,step){
- const body=document.getElementById(bodyId);
- const atmEl=document.getElementById(atmId);
- const expiryEl=document.getElementById(expiryId);
- const status=document.getElementById(statusId);
-
- if(!chain || !Array.isArray(chain.optionsChain)){
-  body.innerHTML='<tr><td colspan="9">Option Chain unavailable</td></tr>';
-  status.textContent="Option Chain data not available.";
-  return;
- }
-
- const options=chain.optionsChain;
- const indexRow=options.find(x=>x.option_type==="");
- const underlying=Number(spot || (indexRow && indexRow.ltp));
-
- if(!Number.isFinite(underlying)){
-  body.innerHTML='<tr><td colspan="9">Spot price unavailable</td></tr>';
-  return;
- }
-
- const atm=Math.round(underlying/step)*step;
- atmEl.textContent=fmt(atm);
- expiryEl.textContent="Expiry: "+findExpiry(chain);
-
- const strikes=[];
- for(let i=-2;i<=2;i++) strikes.push(atm+i*step);
-
- function getOption(strike,type){
-  return options.find(x=>
-   Number(x.strike_price)===strike && x.option_type===type
-  );
- }
-
- function cell(value){
-  return value===undefined || value===null ? "--" : value;
- }
-
- function optionCells(option,type){
-  if(!option) return '<td>--</td><td>--</td><td>--</td><td>--</td>';
-  const change=Number(option.oich||0);
-  const cls=change>0?"green":change<0?"red":"";
-  return '<td class="'+type+'">'+fmt(option.ltp)+'</td>'+
-   '<td>'+fmtVolume(option.oi)+'</td>'+
-   '<td class="'+cls+'">'+(change>0?"+":"")+fmtVolume(change)+'</td>'+
-   '<td>'+fmtVolume(option.volume)+'</td>';
- }
-
- body.innerHTML=strikes.map(strike=>{
-  const ce=getOption(strike,"CE");
-  const pe=getOption(strike,"PE");
-  const isATM=strike===atm;
-  return '<tr class="'+(isATM?"atm":"")+'">'+
-   optionCells(ce,"ce")+
-   '<td class="strike">'+fmtVolume(strike)+'</td>'+
-   optionCells(pe,"pe")+
-   '</tr>';
- }).join("");
-
- const available=strikes.filter(s=>getOption(s,"CE") || getOption(s,"PE")).length;
- status.textContent="Showing "+available+" of 5 nearby strikes. CE / PE data from FYERS.";
-}
-
-function handleData(data){
- const btn=document.getElementById("refreshBtn");
- btn.disabled=false;
-
- if(!data || data.status!=="CONNECTED"){
-  document.getElementById("connection").textContent="ERROR";
-  document.getElementById("message").textContent=
-   data && data.message ? data.message : "Data unavailable";
-  return;
- }
-
- document.getElementById("connection").textContent="CONNECTED";
-
- if(data.nifty){
-  document.getElementById("niftyPrice").textContent=fmt(data.nifty.price);
-  changeText("niftyChange",data.nifty.change,data.nifty.changePercent);
- }
-
- if(data.banknifty){
-  document.getElementById("bankPrice").textContent=fmt(data.banknifty.price);
-  changeText("bankChange",data.banknifty.change,data.banknifty.changePercent);
- }
-
- showIndicators(data.niftyIndicators,data.nifty?data.nifty.price:null,
-  "nifty","niftyEMA","niftyTrend","niftySignal");
-
- showIndicators(data.bankniftyIndicators,data.banknifty?data.banknifty.price:null,
-  "bank","bankEMA","bankTrend","bankSignal");
-
- renderOptionChain(data.niftyOptionChain,
-  data.nifty?data.nifty.price:null,
-  "niftyChain","niftyATM","niftyExpiry","niftyChainStatus",50);
-
- renderOptionChain(data.bankniftyOptionChain,
-  data.banknifty?data.banknifty.price:null,
-  "bankChain","bankATM","bankExpiry","bankChainStatus",100);
-
- document.getElementById("updated").textContent=
-  data.updated?new Date(data.updated).toLocaleString("en-IN"):"--";
-
- document.getElementById("message").textContent=
-  "FYERS data received. 5-minute candles: NIFTY "+
-  (data.niftyIndicators?.candleCount??"--")+
-  ", BANKNIFTY "+(data.bankniftyIndicators?.candleCount??"--");
-}
-
 function loadMarketData(){
- const btn=document.getElementById("refreshBtn");
- btn.disabled=true;
- document.getElementById("connection").textContent="Connecting...";
- document.getElementById("message").textContent="Fetching FYERS data...";
-
- const old=document.getElementById("fyersJsonp");
- if(old) old.remove();
-
- const callback="fyersCallback_"+Date.now();
-
- window[callback]=function(data){
-  handleData(data);
-  delete window[callback];
-  const script=document.getElementById("fyersJsonp");
-  if(script) script.remove();
- };
-
- const script=document.createElement("script");
- script.id="fyersJsonp";
-
- script.onerror=function(){
-  btn.disabled=false;
-  document.getElementById("connection").textContent="ERROR";
-  document.getElementById("message").textContent=
-   "Connection failed. Check Apps Script deployment.";
-  delete window[callback];
- };
-
- script.src=API_URL+"?callback="+callback+"&_="+Date.now();
- document.body.appendChild(script);
+ $("refreshBtn").disabled=true;$("connection").textContent="Connecting...";$("message").textContent="Fetching FYERS data...";
+ let old=$("fyersJsonp");if(old)old.remove();let cb="fyersCallback_"+Date.now();
+ window[cb]=d=>{try{handleData(d)}finally{delete window[cb];let s=$("fyersJsonp");if(s)s.remove()}};
+ let s=document.createElement("script");s.id="fyersJsonp";s.onerror=()=>{ $("refreshBtn").disabled=false;delete window[cb];setError("Connection failed. Check Apps Script deployment and FYERS token.")};
+ s.src=API_URL+"?callback="+cb+"&_="+Date.now();document.body.appendChild(s);
 }
-
 loadMarketData();
-</script>
-</body>
-</html>
+</script></body></html>
