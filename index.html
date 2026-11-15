@@ -45,11 +45,11 @@ td.strike,th.strike{text-align:center;color:#fff;font-weight:bold}
 input{background:#0b1322;border:1px solid var(--line);color:#fff;padding:8px;border-radius:6px}
 .status{font-size:11px;color:var(--muted);line-height:1.5}
 @media(max-width:600px){
-body{padding:9px}
-.card{padding:11px}
-h1{font-size:19px}
-.grid{grid-template-columns:1fr}
-.price{font-size:23px}
+ body{padding:9px}
+ .card{padding:11px}
+ h1{font-size:19px}
+ .grid{grid-template-columns:1fr}
+ .price{font-size:23px}
 }
 </style>
 </head>
@@ -57,23 +57,40 @@ h1{font-size:19px}
 <div class="wrap">
 
 <div class="top">
- <div><h1>🇮🇳 INDIA OPTIONS PRO</h1><div class="sub">NIFTY + BANKNIFTY | 6 INDEPENDENT SIGNALS</div></div>
+ <div>
+  <h1>🇮🇳 INDIA OPTIONS PRO</h1>
+  <div class="sub">NIFTY + BANKNIFTY | 6 INDEPENDENT SIGNALS</div>
+ </div>
  <button id="refreshBtn" onclick="loadMarketData()">↻ REFRESH DATA</button>
 </div>
 
 <div class="card">
- <div class="section-title"><h3>CONNECTION STATUS</h3><b id="connection" class="yellow">CONNECTING...</b></div>
+ <div class="section-title">
+  <h3>CONNECTION STATUS</h3>
+  <b id="connection" class="yellow">CONNECTING...</b>
+ </div>
  <div class="status" id="message">Fetching FYERS data...</div>
  <div class="status">Last Updated: <span id="updated">--</span></div>
 </div>
 
 <div class="grid">
- <div class="card"><div class="muted">NIFTY 50 SPOT</div><div class="price" id="niftyPrice">--</div><div id="niftyChange" class="small">--</div></div>
- <div class="card"><div class="muted">BANKNIFTY SPOT</div><div class="price" id="bankPrice">--</div><div id="bankChange" class="small">--</div></div>
+ <div class="card">
+  <div class="muted">NIFTY 50 SPOT</div>
+  <div class="price" id="niftyPrice">--</div>
+  <div id="niftyChange" class="small">--</div>
+ </div>
+ <div class="card">
+  <div class="muted">BANKNIFTY SPOT</div>
+  <div class="price" id="bankPrice">--</div>
+  <div id="bankChange" class="small">--</div>
+ </div>
 </div>
 
 <div class="card">
- <div class="section-title"><h3>📊 MOMENTUM RADAR</h3><span class="tag wait">MARKET DIRECTION</span></div>
+ <div class="section-title">
+  <h3>📊 MOMENTUM RADAR</h3>
+  <span class="tag wait">MARKET DIRECTION</span>
+ </div>
  <div class="grid">
   <div class="trade-cell"><span>NIFTY MOMENTUM</span><b id="niftyRadarState">WAIT</b></div>
   <div class="trade-cell"><span>NIFTY DIRECTION SCORE</span><b id="niftyRadarScore">--</b></div>
@@ -211,12 +228,15 @@ h1{font-size:19px}
  <h3>📉 HISTORICAL BACKTEST</h3>
  <div class="row"><span>From Date</span><input type="date" id="btFrom"></div>
  <div class="row"><span>To Date</span><input type="date" id="btTo"></div>
- <div class="row"><span>Period</span><div>
-  <button data-period="1">1D</button>
-  <button data-period="7">7D</button>
-  <button data-period="15">15D</button>
-  <button data-period="30">30D</button>
- </div></div>
+ <div class="row">
+  <span>Period</span>
+  <div>
+   <button data-period="1">1D</button>
+   <button data-period="7">7D</button>
+   <button data-period="15">15D</button>
+   <button data-period="30">30D</button>
+  </div>
+ </div>
  <button id="runBacktestBtn" onclick="runBacktest()">▶ RUN BACKTEST</button>
  <p id="btStatus" class="small">Select historical dates to backtest.</p>
  <div id="btResults"></div>
@@ -249,71 +269,113 @@ function waitSignal(p,msg,mode="advanced60"){
    k==="Strength"?(mode==="baseline"?"0 / 3":mode==="power"?"0 / 6":"0 / 5"):
    k==="Reason"?(msg||"Waiting for data"):"--";
  });
- let tag=$(q+"Signal");if(tag)tag.className="tag wait";
+ let tag=$(q+"Signal");
+ if(tag)tag.className="tag wait";
 }
 
 function readIndicators(d,spot,p){
  d=d||{};
  return {
-  spot:num(spot),ema9:num(d.ema9),ema20:num(d.ema20),vwap:num(d.vwap),
-  rsi:num(d.rsi14),adx:num(d.adx14),adxRising:!!d.adxRising,
-  plusDI:num(d.plusDI),minusDI:num(d.minusDI),
-  atr:num(d.atr14),atrAvg:num(d.atrAverage14),
-  volume:num(d.volume),volumeAvg:num(d.volumeAverage20),
+  spot:num(spot),
+  ema9:num(d.ema9),
+  ema20:num(d.ema20),
+  vwap:num(d.vwap),
+  rsi:num(d.rsi14),
+  adx:num(d.adx14),
+  adxRising:!!d.adxRising,
+  plusDI:num(d.plusDI),
+  minusDI:num(d.minusDI),
+  atr:num(d.atr14),
+  atrAvg:num(d.atrAverage14),
+  volume:num(d.volume),
+  volumeAvg:num(d.volumeAverage20),
   trend15:String(d.trend15||"").toUpperCase(),
-  candleCount:num(d.candleCount),candleClose:num(d.lastCandleClose)
+  candleCount:num(d.candleCount),
+  candleClose:num(d.lastCandleClose)
  };
 }
 
+/* FYERS options-chain-v3 format: optionsChain is a flat array.
+   Every CE/PE contract is a separate object with strike_price and option_type. */
 function chainView(raw,spot,p,step){
- let rows=raw&&Array.isArray(raw.rows)?raw.rows:Array.isArray(raw)?raw:[];
- let atm=num(raw&&raw.atmStrike);
- if(!atm&&spot)atm=Math.round(num(spot)/step)*step;
- let expiry=(raw&&raw.expiry)||"--";
- let map=new Map();
- rows.forEach(r=>{
-  let strike=num(r.strikePrice??r.strike);
-  if(!strike)return;
-  map.set(strike,r);
+ const rows=raw&&Array.isArray(raw.optionsChain)?raw.optionsChain:
+            raw&&Array.isArray(raw.rows)?raw.rows:
+            Array.isArray(raw)?raw:[];
+
+ const expiryList=raw&&Array.isArray(raw.expiryData)?raw.expiryData:[];
+ const expiry=expiryList.length?(expiryList[0].date||"--"):
+              (raw&&raw.expiry)||"--";
+
+ const atm=num(raw&&raw.atmStrike)||Math.round(num(spot)/step)*step;
+ const byStrike=new Map();
+
+ rows.forEach(o=>{
+  const strike=num(o.strike_price??o.strikePrice??o.strike);
+  const side=String(o.option_type||o.optionType||"").toUpperCase();
+
+  if(strike<=0||(side!=="CE"&&side!=="PE"))return;
+
+  if(!byStrike.has(strike))byStrike.set(strike,{});
+  byStrike.get(strike)[side]=o;
  });
- let near=[...map.keys()].sort((a,b)=>Math.abs(a-atm)-Math.abs(b-atm)).slice(0,7).sort((a,b)=>a-b);
- let get=(r,side)=>r&&(r[side]||r[side.toLowerCase()]||r[side==="CE"?"call":"put"]||{});
- let byStrike=new Map(rows.map(r=>[num(r.strikePrice??r.strike),r]));
- let getOpt=(o,...keys)=>{
-  for(let k of keys)if(o&&o[k]!==undefined&&o[k]!==null)return o[k];
+
+ const available=[...byStrike.keys()];
+ const near=available
+  .sort((a,b)=>Math.abs(a-atm)-Math.abs(b-atm))
+  .slice(0,7)
+  .sort((a,b)=>a-b);
+
+ const get=(strike,side)=>{
+  const pair=byStrike.get(num(strike));
+  return pair?pair[String(side).toUpperCase()]||null:null;
+ };
+
+ const val=(o,...keys)=>{
+  for(const k of keys){
+   if(o&&o[k]!==undefined&&o[k]!==null)return o[k];
+  }
   return 0;
  };
- let body=near.map(s=>{
-  let r=byStrike.get(s)||{},ce=get(r,"CE"),pe=get(r,"PE");
+
+ const body=near.map(strike=>{
+  const ce=get(strike,"CE");
+  const pe=get(strike,"PE");
+
   return `<tr>
-   <td>${fmt(getOpt(ce,"ltp","LTP"))}</td>
-   <td>${fmt(getOpt(ce,"oi","OI"))}</td>
-   <td>${fmt(getOpt(ce,"oiChange","oi_change"))}</td>
-   <td>${fmt(getOpt(ce,"volume","vol"))}</td>
-   <td class="strike">${fmt(s)}</td>
-   <td>${fmt(getOpt(pe,"ltp","LTP"))}</td>
-   <td>${fmt(getOpt(pe,"oi","OI"))}</td>
-   <td>${fmt(getOpt(pe,"oiChange","oi_change"))}</td>
-   <td>${fmt(getOpt(pe,"volume","vol"))}</td>
+   <td>${fmt(val(ce,"ltp","LTP"))}</td>
+   <td>${fmt(val(ce,"oi","OI"))}</td>
+   <td>${fmt(val(ce,"oich","oiChange","oi_change"))}</td>
+   <td>${fmt(val(ce,"volume","vol"))}</td>
+   <td class="strike">${fmt(strike)}</td>
+   <td>${fmt(val(pe,"ltp","LTP"))}</td>
+   <td>${fmt(val(pe,"oi","OI"))}</td>
+   <td>${fmt(val(pe,"oich","oiChange","oi_change"))}</td>
+   <td>${fmt(val(pe,"volume","vol"))}</td>
   </tr>`;
  }).join("");
 
- $(p+"Chain").innerHTML=body||'<tr><td colspan="9">Option chain unavailable</td></tr>';
+ $(p+"Chain").innerHTML=body||
+  '<tr><td colspan="9">Option chain unavailable</td></tr>';
+
  $(p+"ATM").textContent=atm?fmt(atm):"--";
  $(p+"Expiry").textContent="Expiry: "+expiry;
- $(p+"ChainStatus").textContent=rows.length?"Option chain rows: "+rows.length:"Option chain unavailable";
 
- function getOptionAtStrike(atmStrike,dir){
-  let r=byStrike.get(atmStrike);
-  if(!r)return null;
-  let o=get(r,dir);
-  let ltp=num(getOpt(o,"ltp","LTP","lastPrice"));
-  return ltp>0?{
+ $(p+"ChainStatus").textContent=near.length?
+  "Showing "+near.length+" nearby strikes • FYERS rows: "+rows.length:
+  "Option chain unavailable • FYERS rows: "+rows.length;
+
+ function getOptionAtStrike(strike,dir){
+  const o=get(strike,dir);
+  const ltp=num(val(o,"ltp","LTP","lastPrice"));
+
+  if(!o||ltp<=0)return null;
+
+  return {
    ltp,
-   contract:(o.symbol||o.tradingSymbol||o.name||"")+" "+dir,
-   strike:atmStrike,
+   contract:o.symbol||o.tradingSymbol||o.name||"",
+   strike:num(strike),
    expiry
-  }:null;
+  };
  }
 
  return {atm,expiry,get:getOptionAtStrike,step};
@@ -321,8 +383,10 @@ function chainView(raw,spot,p,step){
 
 function contractFor(cd,dir){
  if(!cd||!cd.atm)return null;
+
  let direct=cd.get(cd.atm,dir);
  if(direct)return direct;
+
  let strikes=[cd.atm-cd.step,cd.atm+cd.step];
  for(let s of strikes){
   let x=cd.get(s,dir);
@@ -334,8 +398,10 @@ function contractFor(cd,dir){
 function showSignal(p,mode,dir,strength,max,reason,cd){
  let suffix=mode==="baseline"?"Baseline":mode==="power"?"Power":"";
  let q=p+suffix;
+
  const signal=dir==="CE"?"BUY CE":dir==="PE"?"BUY PE":"WAIT";
  let tag=$(q+"Signal");
+
  tag.textContent=signal;
  tag.className="tag "+(dir==="CE"?"buy":dir==="PE"?"sell":"wait");
  $(q+"Strength").textContent=strength+" / "+max;
@@ -347,6 +413,7 @@ function showSignal(p,mode,dir,strength,max,reason,cd){
  }
 
  let opt=contractFor(cd,dir);
+
  if(!opt){
   $(q+"Contract").textContent="ATM option premium unavailable";
   ["Entry","SL","T1","T2"].forEach(k=>$(q+k).textContent="--");
@@ -354,7 +421,10 @@ function showSignal(p,mode,dir,strength,max,reason,cd){
  }
 
  let entry=opt.ltp;
- $(q+"Contract").textContent=(opt.contract&&opt.contract!==" "+dir?opt.contract:"ATM "+fmt(opt.strike)+" "+dir)+" | "+opt.expiry;
+
+ $(q+"Contract").textContent=
+  (opt.contract||("ATM "+fmt(opt.strike)+" "+dir))+" | "+opt.expiry;
+
  $(q+"Entry").textContent=money(entry);
  $(q+"SL").textContent=money(entry*.80);
  $(q+"T1").textContent=money(entry*1.25);
@@ -368,19 +438,23 @@ function renderSignal(p,ind,cd,fresh,mode){
  const bull=ind.ema9>ind.ema20&&ind.spot>ind.vwap;
  const bear=ind.ema9<ind.ema20&&ind.spot<ind.vwap;
  const r=ind.rsi;
+
  let dir="",strength=0,reason=[];
 
  if(mode==="baseline"){
   if(bull&&r>=55&&r<=68){
-   dir="CE";strength=3;reason=["EMA9 > EMA20","Spot > VWAP","RSI "+fmt(r)];
+   dir="CE";strength=3;
+   reason=["EMA9 > EMA20","Spot > VWAP","RSI "+fmt(r)];
   }else if(bear&&r>=32&&r<=45){
-   dir="PE";strength=3;reason=["EMA9 < EMA20","Spot < VWAP","RSI "+fmt(r)];
+   dir="PE";strength=3;
+   reason=["EMA9 < EMA20","Spot < VWAP","RSI "+fmt(r)];
   }else{
    if(bull)reason.push("EMA/VWAP bullish");
    else if(bear)reason.push("EMA/VWAP bearish");
    else reason.push("EMA/VWAP mismatch");
    reason.push("RSI "+fmt(r)+" outside entry range");
   }
+
   showSignal(p,mode,dir,strength,3,reason.join(" • "),cd);
   return;
  }
@@ -394,9 +468,11 @@ function renderSignal(p,ind,cd,fresh,mode){
 
  if(mode==="advanced60"){
   if(bull&&r>=55&&r<=68&&adxOk&&diBull&&trendBull&&volumeOk){
-   dir="CE";strength=5;reason=["EMA/VWAP","RSI","ADX rising","DI aligned","15m + Volume"];
+   dir="CE";strength=5;
+   reason=["EMA/VWAP","RSI","ADX rising","DI aligned","15m + Volume"];
   }else if(bear&&r>=32&&r<=45&&adxOk&&diBear&&trendBear&&volumeOk){
-   dir="PE";strength=5;reason=["EMA/VWAP","RSI","ADX rising","DI aligned","15m + Volume"];
+   dir="PE";strength=5;
+   reason=["EMA/VWAP","RSI","ADX rising","DI aligned","15m + Volume"];
   }else{
    reason.push(bull?"Bullish EMA/VWAP":bear?"Bearish EMA/VWAP":"EMA/VWAP mismatch");
    reason.push("RSI "+fmt(r));
@@ -410,9 +486,11 @@ function renderSignal(p,ind,cd,fresh,mode){
   const atrPower=ind.atrAvg>0&&ind.atr>=ind.atrAvg;
 
   if(bull&&r>=55&&r<=70&&adxPower&&diBull&&trendBull&&volPower&&atrPower){
-   dir="CE";strength=6;reason=["EMA/VWAP","RSI","ADX strong","DI aligned","15m + Volume","ATR expansion"];
+   dir="CE";strength=6;
+   reason=["EMA/VWAP","RSI","ADX strong","DI aligned","15m + Volume","ATR expansion"];
   }else if(bear&&r>=30&&r<=45&&adxPower&&diBear&&trendBear&&volPower&&atrPower){
-   dir="PE";strength=6;reason=["EMA/VWAP","RSI","ADX strong","DI aligned","15m + Volume","ATR expansion"];
+   dir="PE";strength=6;
+   reason=["EMA/VWAP","RSI","ADX strong","DI aligned","15m + Volume","ATR expansion"];
   }else{
    reason.push(bull?"Bullish EMA/VWAP":bear?"Bearish EMA/VWAP":"EMA/VWAP mismatch");
    reason.push("RSI "+fmt(r));
@@ -433,12 +511,15 @@ function renderMomentumRadar(p,ind,fresh){
   $(p+"RadarWhy").textContent="Data unavailable or stale";
   return;
  }
+
  let bull=0,bear=0,checks=[];
+
  const add=(name,b,s)=>{
   checks.push({name,bull:b,bear:s});
   if(b)bull++;
   if(s)bear++;
  };
+
  add("EMA",ind.ema9>ind.ema20,ind.ema9<ind.ema20);
  add("VWAP",ind.spot>ind.vwap,ind.spot<ind.vwap);
  add("RSI",ind.rsi>=55,ind.rsi<=45);
@@ -453,12 +534,15 @@ function renderMomentumRadar(p,ind,fresh){
 
  $(p+"RadarState").textContent=state+" / "+direction;
  $(p+"RadarScore").textContent=(direction==="BULLISH"?bull:direction==="BEARISH"?bear:best)+" / 7";
- $(p+"RadarWhy").textContent="Direction "+direction+" • "+checks.filter(x=>direction==="BULLISH"?x.bull:direction==="BEARISH"?x.bear:(x.bull||x.bear)).map(x=>x.name).join(", ")+" • ADX "+fmt(ind.adx)+" • RSI "+fmt(ind.rsi);
+ $(p+"RadarWhy").textContent="Direction "+direction+" • "+
+  checks.filter(x=>direction==="BULLISH"?x.bull:direction==="BEARISH"?x.bear:(x.bull||x.bear))
+  .map(x=>x.name).join(", ")+" • ADX "+fmt(ind.adx)+" • RSI "+fmt(ind.rsi);
 }
 
 function setError(msg){
  $("connection").textContent="ERROR";
  $("message").textContent=msg;
+
  ["nifty","bank"].forEach(p=>{
   ["baseline","advanced60","power"].forEach(m=>waitSignal(p,msg,m));
   let a=$(p+"RadarState");if(a)a.textContent="WAIT / ERROR";
@@ -469,16 +553,19 @@ function setError(msg){
 
 function handleData(d){
  $("refreshBtn").disabled=false;
+
  if(!d||d.status!=="CONNECTED"){
   setError(d&&d.message?d.message:"FYERS data unavailable");
   return;
  }
+
  $("connection").textContent="CONNECTED";
 
  if(d.nifty){
   $("niftyPrice").textContent=fmt(d.nifty.price);
   changeText("niftyChange",d.nifty.change,d.nifty.changePercent);
  }
+
  if(d.banknifty){
   $("bankPrice").textContent=fmt(d.banknifty.price);
   changeText("bankChange",d.banknifty.change,d.banknifty.changePercent);
@@ -486,6 +573,7 @@ function handleData(d){
 
  let ni=readIndicators(d.niftyIndicators,d.nifty&&d.nifty.price,"nifty");
  let bi=readIndicators(d.bankniftyIndicators,d.banknifty&&d.banknifty.price,"bank");
+
  let nc=chainView(d.niftyOptionChain,d.nifty&&d.nifty.price,"nifty",50);
  let bc=chainView(d.bankniftyOptionChain,d.banknifty&&d.banknifty.price,"bank",100);
 
@@ -495,6 +583,7 @@ function handleData(d){
 
  renderMomentumRadar("nifty",ni,fresh);
  renderMomentumRadar("bank",bi,fresh);
+
  renderSignal("nifty",ni,nc,fresh,"baseline");
  renderSignal("bank",bi,bc,fresh,"baseline");
  renderSignal("nifty",ni,nc,fresh,"advanced60");
@@ -503,7 +592,12 @@ function handleData(d){
  renderSignal("bank",bi,bc,fresh,"power");
 
  $("updated").textContent=d.updated?new Date(d.updated).toLocaleString("en-IN"):"--";
- $("message").textContent="FYERS connected • data age: "+(Number.isFinite(age)?Math.max(0,age).toFixed(1)+" min":"unknown")+" • candles NIFTY "+(d.niftyIndicators?.candleCount??"--")+", BANKNIFTY "+(d.bankniftyIndicators?.candleCount??"--")+(fresh?"":" • stale data: signals WAIT");
+
+ $("message").textContent="FYERS connected • data age: "+
+  (Number.isFinite(age)?Math.max(0,age).toFixed(1)+" min":"unknown")+
+  " • candles NIFTY "+(d.niftyIndicators?.candleCount??"--")+
+  ", BANKNIFTY "+(d.bankniftyIndicators?.candleCount??"--")+
+  (fresh?"":" • stale data: signals WAIT");
 }
 
 function loadMarketData(){
@@ -556,12 +650,19 @@ function setBacktestPeriod(days){
  end.setDate(end.getDate()-1);
  const start=new Date(end);
  start.setDate(start.getDate()-(days-1));
+
  $("btFrom").value=localISODate(start);
  $("btTo").value=localISODate(end);
- document.querySelectorAll("[data-period]").forEach(b=>b.classList.toggle("active",Number(b.dataset.period)===days));
+
+ document.querySelectorAll("[data-period]").forEach(b=>
+  b.classList.toggle("active",Number(b.dataset.period)===days)
+ );
 }
 
-document.querySelectorAll("[data-period]").forEach(b=>b.addEventListener("click",()=>setBacktestPeriod(Number(b.dataset.period))));
+document.querySelectorAll("[data-period]").forEach(b=>
+ b.addEventListener("click",()=>setBacktestPeriod(Number(b.dataset.period)))
+);
+
 setBacktestPeriod(1);
 
 function btNum(v){
@@ -570,10 +671,21 @@ function btNum(v){
 
 function renderBacktestSymbol(x){
  if(!x)return "";
+
  let title=x.symbol||"";
  let rows=Array.isArray(x.strategies)?x.strategies:[];
- return '<h3>'+title+'</h3><div class="table-wrap"><table><thead><tr><th>Strategy</th><th>Trades</th><th>Win %</th><th>Directional Accuracy</th><th>Wins</th><th>Losses</th><th>Flats</th></tr></thead><tbody>'+
- rows.map(v=>'<tr><td style="text-align:left">'+(v.name||v.strategy||"--")+'</td><td>'+btNum(v.trades)+'</td><td>'+btNum(v.winRate)+'%</td><td>'+btNum(v.directionalAccuracy)+'%</td><td class="bt-win">'+btNum(v.wins)+'</td><td class="bt-loss">'+btNum(v.losses)+'</td><td>'+btNum(v.flats)+'</td></tr>').join('')+
+
+ return '<h3>'+title+'</h3><div class="table-wrap"><table>'+
+ '<thead><tr><th>Strategy</th><th>Trades</th><th>Win %</th><th>Directional Accuracy</th><th>Wins</th><th>Losses</th><th>Flats</th></tr></thead><tbody>'+
+ rows.map(v=>
+  '<tr><td style="text-align:left">'+(v.name||v.strategy||"--")+
+  '</td><td>'+btNum(v.trades)+
+  '</td><td>'+btNum(v.winRate)+'%'+
+  '</td><td>'+btNum(v.directionalAccuracy)+'%'+
+  '</td><td class="bt-win">'+btNum(v.wins)+
+  '</td><td class="bt-loss">'+btNum(v.losses)+
+  '</td><td>'+btNum(v.flats)+'</td></tr>'
+ ).join('')+
  '</tbody></table></div>'+
  renderOneStrategy(x.legacy,"BASELINE — Existing EMA/VWAP/RSI")+
  renderOneStrategy(x.advanced60,"ADVANCED 60 — Trend + RSI + ADX + 15m Trend + Volume (No Breakout)")+
@@ -583,7 +695,9 @@ function renderBacktestSymbol(x){
 
 function renderOneStrategy(x,title){
  if(!x)return "";
- return '<div class="note"><b>'+title+'</b><br>Trades: '+btNum(x.trades)+' • Wins: '+btNum(x.wins)+' • Losses: '+btNum(x.losses)+' • Win rate: '+btNum(x.winRate)+'%</div>';
+ return '<div class="note"><b>'+title+'</b><br>Trades: '+btNum(x.trades)+
+ ' • Wins: '+btNum(x.wins)+' • Losses: '+btNum(x.losses)+
+ ' • Win rate: '+btNum(x.winRate)+'%</div>';
 }
 
 function runBacktest(){
@@ -626,6 +740,7 @@ function runBacktest(){
     $("btStatus").textContent="Backtest error: "+(d&&d.message?d.message:"Unknown API error");
     return;
    }
+
    $("btStatus").textContent="Backtest completed: "+d.from+" to "+d.to+" · "+d.timeframe+" · Spot direction only.";
    $("btResults").innerHTML=renderBacktestSymbol(d.nifty)+renderBacktestSymbol(d.banknifty);
   }finally{
@@ -646,7 +761,9 @@ function runBacktest(){
   delete window[cb];
   script.remove();
  };
- script.src=API_URL+"?mode=backtest&from="+encodeURIComponent(from)+"&to="+encodeURIComponent(to)+"&callback="+cb+"&_="+Date.now();
+
+ script.src=API_URL+"?mode=backtest&from="+encodeURIComponent(from)+
+  "&to="+encodeURIComponent(to)+"&callback="+cb+"&_="+Date.now();
  document.body.appendChild(script);
 }
 </script>
